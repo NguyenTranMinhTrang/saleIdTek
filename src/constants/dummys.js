@@ -6,31 +6,45 @@ const genarateData = () => {
     console.log(images.productImage);
     const products = [];
     const inputs = [];
+    let j = 0;
+    let id = 1;
+    const inputDetail = [];
 
     for (var i = 1; i <= 1000; i++) {
 
         const price = Math.random() * 100 + 20;
 
-        const input = {
-            id: i,
+        const detail = {
+            id: id,
             idProduct: i,
-            priceInput: price,
+            amount: 100,
+            priceInput: Math.floor(price),
             status: 'good',
-            date: new Date(),
         };
 
         const product = {
             id: i,
-            idInput: i,
-            name: `product ${i}`,
-            price: price + (Math.random() * 20),
+            name: `Product ${i}`,
+            profit: (Math.random() + 0.1).toFixed(1),
             image: images.productImage,
-            discription: 'bla bla bla',
+            description: 'bla bla bla',
             rate: Math.floor(Math.random() * 5 + 1),
         };
 
+        j = j + 1;
+
+        if (j === 5) {
+            const input = {
+                id: id,
+                date: new Date(),
+            };
+            inputs.push(input);
+            j = 0;
+            id = id + 1;
+        }
+
         products.push(product);
-        inputs.push(input);
+        inputDetail.push(detail);
     }
 
 
@@ -89,6 +103,7 @@ const genarateData = () => {
         inputs,
         users,
         outputs,
+        inputDetail,
     };
 };
 

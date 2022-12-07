@@ -5,6 +5,8 @@ const initialState = {
     inputs: [],
     outputs: [],
     users: [],
+    inputDetail: [],
+    filter: [],
 };
 
 export default function (state = initialState, action) {
@@ -13,6 +15,27 @@ export default function (state = initialState, action) {
             const data = action.payload;
             return {
                 ...data,
+            };
+
+        case types.EDIT_PRODUCT:
+            const dateUpdate = action.payload;
+            return {
+                ...state,
+                ...dateUpdate,
+            };
+
+        case types.FILTER:
+            const newFilter = action.payload;
+            return {
+                ...state,
+                ...newFilter,
+            };
+
+        case types.DELETE_PRODUCT:
+            const deleteProduct = action.payload;
+            return {
+                ...state,
+                ...deleteProduct,
             };
 
         default:

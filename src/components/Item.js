@@ -5,7 +5,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import images from '../constants/images';
 
 
-const Item = ({ item, onPress }) => {
+const Item = ({ item, onPress, onLongPress }) => {
 
     const { name, price, rate } = item;
 
@@ -23,6 +23,7 @@ const Item = ({ item, onPress }) => {
             }}
 
             onPress={() => { onPress(item); }}
+            onLongPress={() => { onLongPress(item); }}
         >
             <View style={{ flex: 0.35 }}>
                 <Image
@@ -40,7 +41,7 @@ const Item = ({ item, onPress }) => {
                 <Text style={{ ...FONTS.h2, color: COLORS.white }}>{name}</Text>
                 <Text style={{ ...FONTS.h3, color: COLORS.white }}>{`Price : ${price}`}</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ ...FONTS.h3, marginRight: SIZES.base }}>{`Rate : ${rate}`}</Text>
+                    <Text style={{ ...FONTS.h3, marginRight: SIZES.base, color: COLORS.white }}>{`Rate : ${rate}`}</Text>
                     <AntDesign name="star" size={24} color={COLORS.star} />
                 </View>
             </View>
