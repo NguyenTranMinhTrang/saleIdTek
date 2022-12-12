@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux';
 
 import product from './product';
+import chart from './chart';
 
 import types from '../types';
 
 const appReducer = combineReducers({
     product,
+    chart,
 });
 
 const rootReducer = (state, action) => {

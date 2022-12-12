@@ -18,6 +18,7 @@ export const COLORS = {
     transparentBlack: 'rgba(0, 0, 0, 0.8)',
     transparentBlack1: 'rgba(0, 0, 0, 0.4)',
     star: '#ffd700',
+    green: '#006400',
 };
 export const SIZES = {
     // global sizes

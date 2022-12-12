@@ -2,18 +2,18 @@ import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { SIZES, COLORS, FONTS } from '../constants';
 
-const InputField = ({ field, title, meta }) => {
+const InputField = ({ field, title, meta, style, textColor }) => {
     const { error, touched } = meta;
     return (
         <View
-            style={{
+            style={[{
                 marginVertical: SIZES.base,
-            }}
+            }, style]}
         >
             <View
                 style={styles.container}
             >
-                <Text style={{ ...FONTS.h3, color: COLORS.white }}>{title}</Text>
+                <Text style={[{ ...FONTS.h3, color: COLORS.white }, textColor]}>{title}</Text>
                 <TextInput
                     numberOfLines={4}
                     style={styles.textInput}

@@ -1,5 +1,4 @@
 import images from './images';
-import { eachDayOfInterval } from 'date-fns';
 import _ from 'lodash';
 
 const genarateData = () => {
@@ -74,35 +73,10 @@ const genarateData = () => {
             avatar: 'https://api.lorem.space/image/face?w=640&h=480&r=9182',
         },
     ];
-
-    const result = eachDayOfInterval({
-        start: new Date(2022, 10, 28),
-        end: new Date(2022, 11, 4),
-    });
-
-    const outputs = _.map(result, (dateSale, index) => {
-        return {
-            id: index + 1,
-            idUser: Math.random() * 2 + 1,
-            buy: [
-                {
-                    idProduct: Math.random() * 1000 + 1,
-                    amount: Math.random() * 10 + 5,
-                },
-                {
-                    idProduct: Math.random() * 1000 + 1,
-                    amount: Math.random() * 10 + 5,
-                },
-            ],
-            date: dateSale,
-        };
-    });
-
     return {
         products,
         inputs,
         users,
-        outputs,
         inputDetail,
     };
 };

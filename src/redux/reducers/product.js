@@ -38,6 +38,20 @@ export default function (state = initialState, action) {
                 ...deleteProduct,
             };
 
+        case types.ADD_PRODUCT:
+            const addProduct = action.payload;
+            return {
+                ...state,
+                ...addProduct,
+            };
+
+        case types.ADD_INPUT:
+            const inputList = action.payload;
+            return {
+                ...state,
+                ...inputList,
+            };
+
         default:
             return { ...state };
     }

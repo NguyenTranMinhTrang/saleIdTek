@@ -24,7 +24,9 @@ const Tabs = () => {
                     bottom: 0,
                 },
                 tabBarShowLabel: false,
+                tabBarHideOnKeyboard: true,
             }}
+
             initialRouteName="Home"
         >
             <Tab.Screen

@@ -43,6 +43,10 @@ const Home = ({ navigation }) => {
         navigation.navigate('Detail', { item, reFresh });
     };
 
+    const onPressAdd = () => {
+        navigation.navigate('AddProduct', { reFresh });
+    };
+
     const deleteProduct = (id) => {
         actions.deleteProduct(id);
         reFresh();
@@ -73,7 +77,9 @@ const Home = ({ navigation }) => {
 
                 <Text style={{ ...FONTS.h2, color: COLORS.white }}>List Product</Text>
                 <TouchableOpacity
-                    style={styles.buttonPlus}>
+                    style={styles.buttonPlus}
+                    onPress={onPressAdd}
+                >
                     <AntDesign name="plus" color={COLORS.white} size={35} />
                 </TouchableOpacity>
             </View>

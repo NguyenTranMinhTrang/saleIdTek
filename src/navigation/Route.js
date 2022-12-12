@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Tabs from './Tabs';
-import { Detail } from '../screens';
+import { Detail, AddProduct } from '../screens';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +23,11 @@ const Route = () => {
                 <Stack.Screen
                     name="Detail"
                     component={Detail}
+                />
+
+                <Stack.Screen
+                    name="AddProduct"
+                    component={AddProduct}
                 />
             </Stack.Navigator>
         </NavigationContainer>

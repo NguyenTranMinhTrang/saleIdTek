@@ -2,6 +2,7 @@ import store from '../stores';
 import types from '../types';
 import { getItem } from '../../localStorage';
 import _ from 'lodash';
+import { eachDayOfInterval } from 'date-fns';
 
 const { dispatch } = store;
 
@@ -25,22 +26,68 @@ export const deleteProductList = (data) => ({
     payload: { ...data },
 });
 
-export const filterProduct = (products, inputDetail) => {
-    console.log('begin filter');
+export const addProductList = (data) => ({
+    type: types.ADD_PRODUCT,
+    payload: { ...data },
+});
+
+export const filterProduct = (products, inputDetail, latestInput = null) => {
+    console.log("hello");
     const filterArray = _.map(products, (product) => {
-        const inputObject = _.find(inputDetail, (input) => {
-            if (input.idProduct === product.id && input.amount > 0) {
+        const inputObject = _.filter(inputDetail, (input) => {
+            if (input.idProduct === product.id) {
                 return true;
             }
             return false;
         });
+
+        console.log(inputObject);
+        // if the input found
         if (inputObject) {
+            // have more than 1 input details
+            if (inputObject.length >= 2) {
+                const compare = _.uniqBy(inputObject, 'priceInput');
+                // Case the same price
+                console.log('the same price');
+                if (compare.length === 1) {
+                    const amount = _.reduce(inputObject, (sum, object) => {
+                        return sum + object.amount;
+                    }, 0);
+                    return {
+                        ...product,
+                        amount: amount,
+                        price: Math.floor(compare.priceInput + compare.priceInput * product.profit),
+                    };
+                }
+                // Case different price
+                else {
+                    console.log('different price');
+                    const inputDetailChoose = _.find(inputObject, { id: latestInput.id });
+
+                    return {
+                        ...product,
+                        amount: inputDetailChoose.amount,
+                        price: Math.floor(inputDetailChoose.priceInput + inputDetailChoose.priceInput * product.profit),
+                    };
+                }
+
+            }
+            else {
+                return {
+                    ...product,
+                    amount: inputObject[0].amount,
+                    price: Math.floor(inputObject[0].priceInput * product.profit),
+                };
+            }
+        }
+        // input not found => chua nhap hang => amount and price = 0
+        else {
             return {
                 ...product,
-                price: inputObject.priceInput * product.profit,
+                amount: 0,
+                price: 0,
             };
         }
-        return false;
     });
 
     return _.compact(filterArray);
@@ -49,6 +96,7 @@ export const filterProduct = (products, inputDetail) => {
 export const filterRefresh = () => {
     return new Promise((resolve) => {
         setTimeout(() => {
+            console.log("Start refresh");
             const products = store.getState().product.products;
             const inputDetail = store.getState().product.inputDetail;
             const newFilter = filterProduct(products, inputDetail);
@@ -61,7 +109,44 @@ export const filterRefresh = () => {
 export const getDataFromLocalStorage = async () => {
     const data = await getItem('listData');
     const filterList = filterProduct(data.products, data.inputDetail);
-    dispatch(getData({ ...data, filter: filterList }));
+    const outputs = [];
+    const result = eachDayOfInterval({
+        start: new Date(2022, 10, 28),
+        end: new Date(2022, 11, 11),
+    });
+
+    const n = result.length;
+
+    for (let i = 1; i <= n; i++) {
+        const id = Math.floor(Math.random() * 1000 + 1);
+        const object = _.find(filterList, { id: id });
+        const secondId = Math.floor(Math.random() * 1000 + 1);
+        const secondObject = _.find(filterList, (product) => {
+            return product.id === secondId;
+        });
+
+        const output = {
+            id: i,
+            idUser: Math.random() * 2 + 1,
+            buy: [
+                {
+                    idProduct: id,
+                    amount: Math.floor(Math.random() * 10 + 5),
+                    price: object.price || 0,
+                },
+                {
+                    idProduct: secondId,
+                    amount: Math.floor(Math.random() * 10 + 5),
+                    price: secondObject.price || 0,
+                },
+            ],
+            date: result[Math.floor(Math.random() * (n - 1))],
+        };
+
+        outputs.push(output);
+    }
+
+    dispatch(getData({ ...data, filter: filterList, outputs: outputs }));
 };
 
 export const updateProduct = (item) => {
@@ -89,7 +174,6 @@ export const updateProduct = (item) => {
 };
 
 export const deleteProduct = (id) => {
-    console.log(id);
     const products = store.getState().product.products;
     const listAfterDetele = _.filter(products, (product) => {
         if (product.id === id) {
@@ -100,3 +184,54 @@ export const deleteProduct = (id) => {
     dispatch(deleteProductList({ products: listAfterDetele }));
 };
 
+export const addProduct = (product) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const products = store.getState().product.products;
+            const id = Date.now();
+            products.unshift({
+                id: id,
+                ...product,
+            });
+            dispatch(addProductList({ products }));
+            resolve({ code: 1, message: 'Success !' });
+        }, 500);
+    });
+};
+
+export const addInputList = (data) => ({
+    type: types.ADD_INPUT,
+    payload: { ...data },
+});
+
+export const addInput = (input) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const inputs = store.getState().product.inputs;
+            const inputDetail = store.getState().product.inputDetail;
+            const id = Date.now();
+            const newInput = {
+                id: id,
+                date: input.date,
+            };
+
+            const newInputDetail = _.map(input.itemDetail, (value) => {
+                return {
+                    id: id,
+                    idProduct: value.item.id,
+                    amount: value.amount,
+                    status: input.status,
+                    priceInput: value.priceInput,
+                };
+            });
+
+            console.log(newInput);
+            console.log(newInputDetail);
+
+            inputs.push(newInput);
+            const newConcatArray = _.concat(inputDetail, newInputDetail);
+            dispatch(addInputList({ inputs, inputDetail: newConcatArray }));
+            resolve({ code: 1, message: 'Success !' });
+        }, 500);
+    });
+};
