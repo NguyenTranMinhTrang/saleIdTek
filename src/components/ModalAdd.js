@@ -39,14 +39,14 @@ const ModalAdd = ({ show, setShow, index, setFieldValue }) => {
                         name={`itemDetail[${index}].amount`}
                     >
                         {(props) => (
-                            <InputField title="Amount: " {...props} style={styles.containerFeild} textColor={styles.textColor} />
+                            <InputField title="Amount: " {...props} keyBoard="number-pad" style={styles.containerFeild} textColor={styles.textColor} />
                         )}
                     </FastField>
                     <FastField
                         name={`itemDetail[${index}].priceInput`}
                     >
                         {(props) => (
-                            <InputField title="Price: " {...props} style={styles.containerFeild} textColor={styles.textColor} />
+                            <InputField title="Price: " {...props} keyBoard="number-pad" style={styles.containerFeild} textColor={styles.textColor} />
                         )}
                     </FastField>
                     <TouchableOpacity

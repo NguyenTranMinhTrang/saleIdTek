@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { SIZES, COLORS, FONTS } from '../constants';
 
-const InputField = ({ field, title, meta, style, textColor }) => {
+const InputField = ({ field, title, meta, style, textColor, keyBoard }) => {
     const { error, touched } = meta;
     return (
         <View
@@ -20,6 +20,7 @@ const InputField = ({ field, title, meta, style, textColor }) => {
                     value={`${field.value}`}
                     onChangeText={(text) => field.onChange(field.name)(text)}
                     onBlur={field.onBlur(field.name)}
+                    keyboardType={keyBoard ? keyBoard : 'default'}
                 />
             </View>
             {

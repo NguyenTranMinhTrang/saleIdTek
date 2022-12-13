@@ -4,6 +4,7 @@ import Detail from './Detail';
 import Input from './Input';
 import Store from './Store';
 import AddProduct from './AddProduct';
+import ChartDay from './ChartDay';
 
 export {
     Home,
@@ -12,4 +13,5 @@ export {
     Input,
     Store,
     AddProduct,
+    ChartDay,
 };

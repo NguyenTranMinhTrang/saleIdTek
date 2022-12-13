@@ -144,7 +144,7 @@ const AddProduct = ({ navigation, route }) => {
                                         name="profit"
                                     >
                                         {(props) => (
-                                            <InputField title="Profit: " {...props} />
+                                            <InputField keyBoard="number-pad" title="Profit: " {...props} />
                                         )}
                                     </FastField>
 

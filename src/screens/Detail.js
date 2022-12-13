@@ -120,7 +120,7 @@ const Detail = ({ navigation, route }) => {
                                         name="profit"
                                     >
                                         {(props) => (
-                                            <InputField title="Profit: " {...props} />
+                                            <InputField title="Profit: " {...props} keyBoard="number-pad" />
                                         )}
                                     </FastField>
 

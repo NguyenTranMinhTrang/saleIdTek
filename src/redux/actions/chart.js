@@ -29,6 +29,8 @@ export const chartDays = (start, end) => {
         end: end,
     });
 
+    const xLabel = [];
+
     const result = _.map(days, (day) => {
         const outputOfDate = _.filter(outputs, (output) => {
             return isEqual(output.date, day);
@@ -44,12 +46,14 @@ export const chartDays = (start, end) => {
             return sum + product.price;
         }, 0);
 
-        return { x: format(day, 'dd/MM/yyyy'), y: total };
+        xLabel.push(format(day, 'dd/MM/yyyy'));
+        return { y: total };
     });
 
     console.log('get chart by date: ', result);
+    console.log('label: ', xLabel);
 
-    dispatch(getChartByDate({ values: result }));
+    dispatch(getChartByDate({ values: result, label: xLabel }));
 };
 
 export const chartWeeks = (start, end) => {

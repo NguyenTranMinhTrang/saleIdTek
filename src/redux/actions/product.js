@@ -31,8 +31,12 @@ export const addProductList = (data) => ({
     payload: { ...data },
 });
 
-export const filterProduct = (products, inputDetail, latestInput = null) => {
-    console.log("hello");
+export const updateInputDetail = (data) => ({
+    type: types.UPDATE_INPUT_DETAILS,
+    payload: { ...data },
+});
+
+export const filterProduct = (products, inputDetail, latestInput) => {
     const filterArray = _.map(products, (product) => {
         const inputObject = _.filter(inputDetail, (input) => {
             if (input.idProduct === product.id) {
@@ -40,30 +44,40 @@ export const filterProduct = (products, inputDetail, latestInput = null) => {
             }
             return false;
         });
-
-        console.log(inputObject);
         // if the input found
-        if (inputObject) {
+        if (inputObject.length !== 0) {
             // have more than 1 input details
             if (inputObject.length >= 2) {
-                const compare = _.uniqBy(inputObject, 'priceInput');
+                const isPrice = _.every(inputObject, { priceInput: inputObject[0].priceInput });
                 // Case the same price
-                console.log('the same price');
-                if (compare.length === 1) {
+                if (isPrice) {
                     const amount = _.reduce(inputObject, (sum, object) => {
                         return sum + object.amount;
                     }, 0);
                     return {
                         ...product,
                         amount: amount,
-                        price: Math.floor(compare.priceInput + compare.priceInput * product.profit),
+                        price: Math.floor(inputObject[0].priceInput + inputObject[0].priceInput * product.profit),
                     };
                 }
                 // Case different price
                 else {
-                    console.log('different price');
                     const inputDetailChoose = _.find(inputObject, { id: latestInput.id });
 
+                    console.log("inputDetailChoose: ", inputDetailChoose);
+
+                    const indexChoose = _.findIndex(inputObject, inputDetailChoose);
+
+                    console.log("index: ", indexChoose);
+
+                    const listRemove = _.filter(inputObject, (input, index) => {
+                        return index !== indexChoose;
+                    });
+
+                    console.log("listRemove: ", listRemove);
+
+                    const newDetail = _.pullAllWith(inputDetail, listRemove, _.isEqual);
+                    dispatch(updateInputDetail({ inputDetail: newDetail }));
                     return {
                         ...product,
                         amount: inputDetailChoose.amount,
@@ -73,10 +87,11 @@ export const filterProduct = (products, inputDetail, latestInput = null) => {
 
             }
             else {
+                console.log(inputObject);
                 return {
                     ...product,
                     amount: inputObject[0].amount,
-                    price: Math.floor(inputObject[0].priceInput * product.profit),
+                    price: Math.floor(inputObject[0].priceInput + inputObject[0].priceInput * product.profit),
                 };
             }
         }
@@ -93,13 +108,12 @@ export const filterProduct = (products, inputDetail, latestInput = null) => {
     return _.compact(filterArray);
 };
 
-export const filterRefresh = () => {
+export const filterRefresh = (newInput = null) => {
     return new Promise((resolve) => {
         setTimeout(() => {
-            console.log("Start refresh");
             const products = store.getState().product.products;
             const inputDetail = store.getState().product.inputDetail;
-            const newFilter = filterProduct(products, inputDetail);
+            const newFilter = filterProduct(products, inputDetail, newInput);
             dispatch(filter({ filter: newFilter }));
             resolve(true);
         }, 500);
@@ -219,9 +233,9 @@ export const addInput = (input) => {
                 return {
                     id: id,
                     idProduct: value.item.id,
-                    amount: value.amount,
+                    amount: Number(value.amount),
                     status: input.status,
-                    priceInput: value.priceInput,
+                    priceInput: Number(value.priceInput),
                 };
             });
 
@@ -231,7 +245,7 @@ export const addInput = (input) => {
             inputs.push(newInput);
             const newConcatArray = _.concat(inputDetail, newInputDetail);
             dispatch(addInputList({ inputs, inputDetail: newConcatArray }));
-            resolve({ code: 1, message: 'Success !' });
+            resolve({ code: 1, message: 'Success !', newInput: newInput });
         }, 500);
     });
 };

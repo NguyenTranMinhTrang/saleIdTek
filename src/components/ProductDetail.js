@@ -25,6 +25,7 @@ const ProductDetail = () => {
                             // eslint-disable-next-line react-native/no-inline-styles
                             style={{ flex: 1 }}
                             title="Remove :"
+                            keyBoard="number-pad"
                             {...props}
                         />
                     )}

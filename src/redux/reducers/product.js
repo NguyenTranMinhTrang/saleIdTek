@@ -52,6 +52,13 @@ export default function (state = initialState, action) {
                 ...inputList,
             };
 
+        case types.UPDATE_INPUT_DETAILS:
+            const newDetail = action.payload;
+            return {
+                ...state,
+                ...newDetail,
+            };
+
         default:
             return { ...state };
     }

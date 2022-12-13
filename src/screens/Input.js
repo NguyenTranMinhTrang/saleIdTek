@@ -35,8 +35,8 @@ const Input = () => {
             ).required('Must have product'),
     });
 
-    const handleCancel = () => {
-        actions.filterRefresh();
+    const handleCancel = (newInput) => {
+        actions.filterRefresh(newInput);
     };
 
     const handleAddInput = async (values) => {
@@ -46,7 +46,7 @@ const Input = () => {
         if (result && result.code === 1) {
             Alert.alert('Sucess', 'Do you want to back to the Home screen or continue ?',
                 [
-                    { text: 'Home Screen', onPress: handleCancel },
+                    { text: 'Home Screen', onPress: () => handleCancel(result.newInput) },
                     { text: 'Continue', onPress: () => console.log('OK Pressed') },
                 ],
                 { cancelable: false }

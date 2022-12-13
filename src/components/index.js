@@ -5,6 +5,7 @@ import ModalAdd from './ModalAdd';
 import ProductDetail from './ProductDetail';
 import DateModal from './DateModal';
 import PickDateModal from './PickDateModal';
+import Chart from './Chart';
 
 export {
     Item,
@@ -14,4 +15,5 @@ export {
     ProductDetail,
     DateModal,
     PickDateModal,
+    Chart,
 };

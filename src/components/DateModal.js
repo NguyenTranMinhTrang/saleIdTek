@@ -12,7 +12,7 @@ const DateModal = ({ show, setShow, date, setDate, title }) => {
         <View
             style={styles.containerDate}
         >
-            <Text style={{ ...FONTS.h3, marginRight: SIZES.base, color: COLORS.white }}>{title}</Text>
+            <Text style={{ ...FONTS.h3, marginRight: SIZES.base, color: COLORS.black }}>{title}</Text>
             {
                 date &&
                 <View style={styles.textDate}>

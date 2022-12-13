@@ -4,9 +4,10 @@ import { SIZES, COLORS, FONTS } from '../constants';
 import { BlurView } from '@react-native-community/blur';
 import DateModal from './DateModal';
 import MonthModal from './MonthModal';
-import { isAfter, subDays } from 'date-fns';
+import { isAfter, subDays, format } from 'date-fns';
+import actions from '../redux/actions';
 
-const PickDateModal = ({ show, setShow, state }) => {
+const PickDateModal = ({ show, setShow, state, setDateChoose }) => {
 
     const [start, setStart] = React.useState(subDays(new Date(), 7));
     const [end, setEnd] = React.useState(new Date());
@@ -85,6 +86,10 @@ const PickDateModal = ({ show, setShow, state }) => {
                                 }
                                 else {
                                     setShow(false);
+                                    setDateChoose(`${format(start, 'dd/MM/yyyy')} - ${format(end, 'dd/MM/yyyy')}`);
+                                    if (state === 'date') {
+                                        actions.chartDays(start, end);
+                                    }
                                 }
                             }}
                         >
@@ -124,7 +129,7 @@ const styles = StyleSheet.create({
     button: {
         height: 60,
         width: 150,
-        backgroundColor: COLORS.orange,
+        backgroundColor: COLORS.primary,
         marginTop: SIZES.padding,
         borderRadius: SIZES.radius,
         justifyContent: 'center',
