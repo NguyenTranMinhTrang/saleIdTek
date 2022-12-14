@@ -36,6 +36,10 @@ export const updateInputDetail = (data) => ({
     payload: { ...data },
 });
 
+export const updateFilterList = (newFilterList) => {
+    dispatch(filter({ filter: newFilterList }));
+};
+
 export const filterProduct = (products, inputDetail, latestInput) => {
     const filterArray = _.map(products, (product) => {
         const inputObject = _.filter(inputDetail, (input) => {
@@ -64,17 +68,14 @@ export const filterProduct = (products, inputDetail, latestInput) => {
                 else {
                     const inputDetailChoose = _.find(inputObject, { id: latestInput.id });
 
-                    console.log("inputDetailChoose: ", inputDetailChoose);
 
                     const indexChoose = _.findIndex(inputObject, inputDetailChoose);
 
-                    console.log("index: ", indexChoose);
 
                     const listRemove = _.filter(inputObject, (input, index) => {
                         return index !== indexChoose;
                     });
 
-                    console.log("listRemove: ", listRemove);
 
                     const newDetail = _.pullAllWith(inputDetail, listRemove, _.isEqual);
                     dispatch(updateInputDetail({ inputDetail: newDetail }));
@@ -87,7 +88,6 @@ export const filterProduct = (products, inputDetail, latestInput) => {
 
             }
             else {
-                console.log(inputObject);
                 return {
                     ...product,
                     amount: inputObject[0].amount,
@@ -160,7 +160,7 @@ export const getDataFromLocalStorage = async () => {
         outputs.push(output);
     }
 
-    dispatch(getData({ ...data, filter: filterList, outputs: outputs }));
+    dispatch(getData({ ...data, filter: filterList, outputs: outputs, filterOriginal: filterList }));
 };
 
 export const updateProduct = (item) => {

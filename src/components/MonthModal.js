@@ -45,7 +45,6 @@ const MonthModal = ({ show, setShow, date, setDate, title }) => {
                 <MonthPicker
                     onChange={onValueChange}
                     value={date}
-                    locale="ko"
                 />
 
             }

@@ -74,7 +74,7 @@ const genarateData = () => {
         },
     ];
     return {
-        products,
+        products: _.sortBy(products, ['name']),
         inputs,
         users,
         inputDetail,

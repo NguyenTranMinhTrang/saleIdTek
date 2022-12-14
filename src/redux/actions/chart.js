@@ -53,7 +53,7 @@ export const chartDays = (start, end) => {
     console.log('get chart by date: ', result);
     console.log('label: ', xLabel);
 
-    dispatch(getChartByDate({ values: result, label: xLabel }));
+    dispatch(getChartByDate({ data: result, label: xLabel }));
 };
 
 export const chartWeeks = (start, end) => {
@@ -67,7 +67,7 @@ export const chartWeeks = (start, end) => {
     });
 
     const outputs = store.getState().product.outputs;
-
+    const xLabel = [];
     const result = _.map(weeks, (sunday, index) => {
         const outputOfDate = _.filter(outputs, (output) => {
             return isWithinInterval(output.date, {
@@ -86,12 +86,15 @@ export const chartWeeks = (start, end) => {
             return sum + product.price;
         }, 0);
 
-        return { x: format(mondays[index], 'dd/MM/yyyy') - format(sunday, 'dd/MM/yyyy'), y: total };
+        xLabel.push(`${format(mondays[index], 'dd/MM')} - ${format(sunday, 'dd/MM')}`);
+
+        return { y: total };
     });
 
+    console.log('label week: ', xLabel);
     console.log('get chart by week: ', result);
 
-    dispatch(getChartByWeek({ values: result }));
+    dispatch(getChartByWeek({ data: result, label: xLabel }));
 };
 
 export const chartMonths = (start, end) => {
@@ -105,7 +108,7 @@ export const chartMonths = (start, end) => {
     });
 
     const outputs = store.getState().product.outputs;
-
+    const xLabel = [];
     const result = _.map(months, (startMonth, index) => {
         const outputOfDate = _.filter(outputs, (output) => {
             return isWithinInterval(output.date, {
@@ -124,11 +127,14 @@ export const chartMonths = (start, end) => {
             return sum + product.price;
         }, 0);
 
-        return { x: format(startMonth, 'dd/MM/yyyy') - format(endMonths[index], 'dd/MM/yyyy'), y: total };
+        xLabel.push(`${format(startMonth, 'dd/MM')} - ${format(endMonths[index], 'dd/MM')}`);
+
+        return { y: total };
     });
 
+    console.log('label month: ', xLabel);
     console.log('get chart by month: ', result);
 
-    dispatch(getChartByMonth({ values: result }));
+    dispatch(getChartByMonth({ data: result, label: xLabel }));
 };
 

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ActivityIndicator, FlatList, StyleSheet, 
 import { COLORS, FONTS, SIZES } from '../constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { Item } from '../components';
+import { Item, Search } from '../components';
 import actions from '../redux/actions';
 import { useSelector } from 'react-redux';
 import { getData } from '../localStorage';
@@ -18,7 +18,6 @@ const Home = ({ navigation }) => {
             await actions.getDataFromLocalStorage();
             setLoading(false);
         };
-
         getListData();
     }, []);
 
@@ -34,7 +33,7 @@ const Home = ({ navigation }) => {
     };
 
     const handleScroll = async (e) => {
-        if (e.nativeEvent.contentOffset.y <= 0) {
+        if (e.nativeEvent.contentOffset.y < 0) {
             reFresh();
         }
     };
@@ -96,18 +95,27 @@ const Home = ({ navigation }) => {
 
         return (
             <View style={styles.containerProductList}>
+                <Search />
                 {
                     loading
                         ? <ActivityIndicator size="large" color={COLORS.white} />
-                        : <FlatList
-                            data={filter}
-                            keyExtractor={item => `${item.id}`}
-                            showsVerticalScrollIndicator={false}
-                            renderItem={renderItem}
-                            initialNumToRender={3}
-                            windowSize={4}
-                            onScroll={handleScroll}
-                        />
+                        :
+                        <>
+                            {
+                                filter.length !== 0 ?
+                                    <FlatList
+                                        data={filter}
+                                        keyExtractor={item => `${item.id}`}
+                                        showsVerticalScrollIndicator={false}
+                                        renderItem={renderItem}
+                                        initialNumToRender={3}
+                                        windowSize={4}
+                                        onScroll={handleScroll}
+                                    />
+                                    :
+                                    <Text style={{ ...FONTS.h3, color: COLORS.white }}>No product match</Text>
+                            }
+                        </>
                 }
             </View>
         );

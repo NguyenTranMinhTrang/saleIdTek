@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { COLORS, SIZES, FONTS, images } from '../constants';
+import { subDays } from 'date-fns';
 
 const Chart = ({ navigation }) => {
     return (
@@ -20,19 +21,33 @@ const Chart = ({ navigation }) => {
                 >
                     <TouchableOpacity
                         style={styles.buttonContain}
-                        onPress={() => navigation.navigate('ChartDay')}
+                        onPress={() => navigation.navigate('ChartDay', {
+                            state: 'date',
+                            formatDate: 'dd/MM/yyyy',
+                            initialState: { start: subDays(new Date(), 7), end: new Date() },
+                        })}
                     >
                         <Text style={{ ...FONTS.h3, color: COLORS.black }}>Theo Ngày</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.buttonContain}
+                        onPress={() => navigation.navigate('ChartDay', {
+                            state: 'week',
+                            formatDate: 'dd/MM/yyyy',
+                            initialState: { start: subDays(new Date(), 30), end: new Date() },
+                        })}
                     >
                         <Text style={{ ...FONTS.h3, color: COLORS.black }}>Theo Tuần</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.buttonContain}
+                        onPress={() => navigation.navigate('ChartDay', {
+                            state: 'month',
+                            formatDate: 'dd/MM',
+                            initialState: { start: subDays(new Date(), 180), end: new Date() },
+                        })}
                     >
                         <Text style={{ ...FONTS.h3, color: COLORS.black }}>Theo Tháng</Text>
                     </TouchableOpacity>

@@ -34,6 +34,7 @@ const Route = () => {
                     name="ChartDay"
                     component={ChartDay}
                 />
+
             </Stack.Navigator>
         </NavigationContainer>
     );

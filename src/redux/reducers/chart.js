@@ -1,33 +1,16 @@
 import types from '../types';
 import { processColor } from 'react-native';
-const COLOR_PURPLE = processColor('#697dfb');
+import { COLORS } from '../../constants';
+import update from 'immutability-helper';
 
 const initialState = {
-    data: {
-        dataSets: [
-            {
-                values: [],
-                label: '',
-                config: {
-                    lineWidth: 1.5,
-                    drawCircles: true,
-                    drawCubicIntensity: 0.5,
-                    drawCubic: false,
-                    drawHighlightIndicators: false,
-                    color: COLOR_PURPLE,
-                    drawFilled: true,
-                    fillColor: COLOR_PURPLE,
-                    fillAlpha: 90,
-                },
-            },
-        ],
-    },
-    xAis: {
-        valueFormatter: [],
-        textColor: processColor('red'),
-        textSize: 16,
-        gridColor: processColor('red'),
+    xAxis: {
+        textColor: processColor('white'),
+        textSize: 14,
+        gridColor: processColor(COLORS.lightGreen),
         gridLineWidth: 1,
+        granularityEnabled: true,
+        granularity: 1,
         axisLineColor: processColor('darkgray'),
         axisLineWidth: 1.5,
         gridDashedLine: {
@@ -36,18 +19,20 @@ const initialState = {
         },
         avoidFirstLastClipping: false,
         position: 'BOTTOM',
+        valueFormatter: [],
+        labelRotationAngle: 90,
     },
     yAxis: {
         left: {
             drawGridLines: true,
             limitLines: [{
                 limit: 112.4,
-                lineColor: processColor('red'),
+                lineColor: processColor(COLORS.lightGreen),
                 lineDashPhase: 2,
                 lineDashLengths: [10, 20],
             }, {
                 limit: 89.47,
-                lineColor: processColor('red'),
+                lineColor: processColor(COLORS.lightGreen),
                 lineDashPhase: 2,
                 lineDashLengths: [10, 20],
             }],
@@ -56,27 +41,111 @@ const initialState = {
             drawGridLines: true,
         },
     },
+
+    data: {
+        dataSets: [
+            {
+                values: [],
+                label: 'Doanh thu',
+                config: {
+                    lineWidth: 1.5,
+                    drawCircles: true,
+                    drawCubicIntensity: 0.5,
+                    drawCubic: false,
+                    drawHighlightIndicators: false,
+                    color: processColor(COLORS.lightGreen),
+                    drawFilled: true,
+                    fillColor: processColor(COLORS.lightGreen),
+                    fillAlpha: 90,
+                },
+            },
+        ],
+    },
+    legend: {
+        enabled: true,
+        textSize: 14,
+        form: 'SQUARE',
+        formSize: 14,
+        xEntrySpace: 5,
+        yEntrySpace: 10,
+        formToTextSpace: 5,
+        wordWrapEnabled: false,
+        maxSizePercent: 0.5,
+        textColor: processColor(COLORS.white),
+    },
+    marker: {
+        enabled: true,
+        markerColor: processColor(COLORS.primary),
+        textColor: processColor('white'),
+        markerFontSize: 16,
+    },
 };
 
 export default function (state = initialState, action) {
     switch (action.type) {
         case types.CHART_DATE:
-            const dataDate = action.payload;
-            let newState = { ...state };
-            console.log("reducer: ", dataDate.label);
-            newState.data.dataSets[0].values = dataDate.values;
-            newState.data.xAis.valueFormatter = [...dataDate.label];
-            return { ...newState };
+            const newStateDate = update(state, {
+                xAxis: {
+                    $set: {
+                        ...state.xAxis,
+                        valueFormatter: action.payload.label,
+                    },
+                },
+                data: {
+                    $set: {
+                        dataSets: [{
+                            ...state.data.dataSets[0],
+                            values: action.payload.data,
+                        }],
+                    },
+                },
+            });
+
+            return { ...newStateDate };
 
         case types.CHART_WEEK:
-            const dataWeek = action.payload;
-            state.data.dataSets[0].values = dataWeek.values;
-            return { ...state };
+            const newStateWeek = update(state, {
+                xAxis: {
+                    $set: {
+                        ...state.xAxis,
+                        valueFormatter: action.payload.label,
+                    },
+                },
+                data: {
+                    $set: {
+                        dataSets: [{
+                            ...state.data.dataSets[0],
+                            values: action.payload.data,
+                        }],
+                    },
+                },
+            });
+
+            console.log("New state week: ", newStateWeek);
+
+            return { ...newStateWeek };
 
         case types.CHART_MONTH:
-            const dataMonth = action.payload;
-            state.data.dataSets[0].values = dataMonth.values;
-            return { ...state };
+            const newStateMonth = update(state, {
+                xAxis: {
+                    $set: {
+                        ...state.xAxis,
+                        valueFormatter: action.payload.label,
+                    },
+                },
+                data: {
+                    $set: {
+                        dataSets: [{
+                            ...state.data.dataSets[0],
+                            values: action.payload.data,
+                        }],
+                    },
+                },
+            });
+
+            console.log("New state month: ", newStateMonth);
+
+            return { ...newStateMonth };
         default:
             return state;
     }

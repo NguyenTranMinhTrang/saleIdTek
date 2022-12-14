@@ -7,6 +7,7 @@ const initialState = {
     users: [],
     inputDetail: [],
     filter: [],
+    filterOriginal: [],
 };
 
 export default function (state = initialState, action) {

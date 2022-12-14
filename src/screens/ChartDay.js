@@ -3,17 +3,63 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { COLORS, SIZES, FONTS } from '../constants';
 import { PickDateModal, Chart } from '../components';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { format, subDays } from 'date-fns';
+import { format } from 'date-fns';
+import actions from '../redux/actions';
 
-const ChartDay = ({ navigation }) => {
+const ChartDay = ({ navigation, route }) => {
 
     const [show, setShow] = React.useState(false);
-    const [filterDate, setFilterDate] = React.useState(`${format(subDays(new Date(), 7), 'dd/MM/yyyy')} - ${format(new Date(), 'dd/MM/yyyy')}`);
+    const [data, setData] = React.useState(null);
+
+    React.useEffect(() => {
+        const { state, formatDate, initialState } = route.params;
+        setData({
+            state,
+            formatDate,
+            date: `${format(initialState.start, formatDate)} - ${format(initialState.end, formatDate)}`,
+        });
+        if (state === 'date') {
+            actions.chartDays(initialState.start, initialState.end);
+        }
+        else if (state === 'week') {
+            actions.chartWeeks(initialState.start, initialState.end);
+        }
+        else {
+            actions.chartMonths(initialState.start, initialState.end);
+
+        }
+    }, []);
+
+    const setFilterDate = (date) => {
+        setData({
+            ...data,
+            date: date,
+        });
+    };
 
     return (
         <View style={styles.container}>
             <View style={styles.containHeader}>
-                <Text style={{ ...FONTS.h2, color: COLORS.white }}>Doanh Thu Theo Ngày</Text>
+                <TouchableOpacity
+                    style={styles.buttonBack}
+                    onPress={() => navigation.goBack()}
+                >
+                    <AntDesign
+                        size={30}
+                        name="arrowleft"
+                        color={COLORS.white}
+                    />
+                </TouchableOpacity>
+
+                {
+                    data?.state === 'date' ?
+                        <Text style={{ ...FONTS.h2, color: COLORS.white }}>Doanh Thu Theo Ngày</Text>
+                        :
+                        data?.state === 'week' ?
+                            <Text style={{ ...FONTS.h2, color: COLORS.white }}>Doanh Thu Theo Tuần</Text>
+                            :
+                            <Text style={{ ...FONTS.h2, color: COLORS.white }}>Doanh Thu Theo Tháng</Text>
+                }
             </View>
 
             {/* Modal */}
@@ -21,7 +67,7 @@ const ChartDay = ({ navigation }) => {
             <PickDateModal
                 show={show}
                 setShow={setShow}
-                state="date"
+                state={data?.state}
                 setDateChoose={setFilterDate}
             />
 
@@ -40,7 +86,7 @@ const ChartDay = ({ navigation }) => {
                         color={COLORS.white}
                     />
                 </TouchableOpacity>
-                <Text style={{ ...FONTS.h3, color: COLORS.white }}>{filterDate}</Text>
+                <Text style={{ ...FONTS.h3, color: COLORS.white }}>{data?.date}</Text>
             </View>
 
             {/* Chart */}
@@ -55,16 +101,26 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.black,
-        padding: SIZES.padding,
+        paddingVertical: SIZES.padding,
     },
-    containHeader: { alignItems: 'center' },
+    containHeader: { alignItems: 'center', flexDirection: 'row', justifyContent: 'center' },
     containViewButton: {
         flexDirection: 'row',
-        marginVertical: SIZES.padding,
         alignItems: 'center',
+        padding: SIZES.padding,
+    },
+    buttonBack: {
+        height: 50,
+        width: 50,
+        position: 'absolute',
+        left: SIZES.padding,
+        backgroundColor: COLORS.primary,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: SIZES.radius
     },
     containChart: {
-        height: 300,
+        height: 500,
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',

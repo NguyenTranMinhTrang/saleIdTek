@@ -4,7 +4,7 @@ import { SIZES, COLORS, FONTS } from '../constants';
 import { BlurView } from '@react-native-community/blur';
 import DateModal from './DateModal';
 import MonthModal from './MonthModal';
-import { isAfter, subDays, format } from 'date-fns';
+import { isAfter, subDays, format, isFuture, differenceInWeeks, differenceInMonths } from 'date-fns';
 import actions from '../redux/actions';
 
 const PickDateModal = ({ show, setShow, state, setDateChoose }) => {
@@ -13,6 +13,8 @@ const PickDateModal = ({ show, setShow, state, setDateChoose }) => {
     const [end, setEnd] = React.useState(new Date());
     const [showStart, setShowStart] = React.useState(false);
     const [showEnd, setShowEnd] = React.useState(false);
+
+    console.log(differenceInWeeks(start, end));
 
     return (
         // eslint-disable-next-line react/self-closing-comp
@@ -84,11 +86,26 @@ const PickDateModal = ({ show, setShow, state, setDateChoose }) => {
                                 if (isAfter(start, end)) {
                                     Alert.alert('The begin date must be before the end date!');
                                 }
+                                else if (isFuture(end)) {
+                                    Alert.alert('Invalid date');
+                                }
+                                else if (state === 'week' && differenceInWeeks(end, start) < 2) {
+                                    Alert.alert('The distance must be greater than or equal 2 weeks');
+                                }
+                                else if (state === 'month' && differenceInMonths(end, start) < 2) {
+                                    Alert.alert('The distance must be greater or equal than 2 months');
+                                }
                                 else {
                                     setShow(false);
                                     setDateChoose(`${format(start, 'dd/MM/yyyy')} - ${format(end, 'dd/MM/yyyy')}`);
                                     if (state === 'date') {
                                         actions.chartDays(start, end);
+                                    }
+                                    else if (state === 'week') {
+                                        actions.chartWeeks(start, end);
+                                    }
+                                    else {
+                                        actions.chartMonths(start, end);
                                     }
                                 }
                             }}
