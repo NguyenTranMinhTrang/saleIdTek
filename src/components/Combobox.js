@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     buttonStyle: {
         flex: 1,
         backgroundColor: COLORS.lightGray,
-        height: 70,
+        height: 60,
         borderRadius: SIZES.radius,
     },
     buttonText: {

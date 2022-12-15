@@ -1,25 +1,24 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, TextInput, Text } from 'react-native';
 import { COLORS, FONTS, SIZES } from '../constants';
 import _ from 'lodash';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useSelector } from 'react-redux';
 import actions from '../redux/actions';
+import { forwardRef } from 'react';
 
 
-const Search = () => {
+const Search = forwardRef((props, ref) => {
     const filterOriginal = useSelector((state) => state.product.filterOriginal);
-
+    const filter = useSelector((state) => state.product.filter);
     React.useEffect(() => {
         return () => {
             debouncedResults.cancel();
         };
     }, []);
-
     const debouncedResults = React.useCallback(
         _.debounce((text, filterOriginal) => {
             if (text !== '') {
-                console.log("Hello: ", text);
                 const searchText = _.lowerCase(text);
                 const filterList = [];
                 _.forEach(filterOriginal, (object) => {
@@ -36,27 +35,29 @@ const Search = () => {
         }, 300, { leading: true }),
         []
     );
-
     return (
-        <View style={styles.container} >
-            <TouchableOpacity style={styles.buttonSearch}>
-                <AntDesign
-                    size={30}
-                    color={COLORS.white}
-                    name="search1"
+        <View>
+            <View style={styles.containerSearch} >
+                <TouchableOpacity style={styles.buttonSearch}>
+                    <AntDesign
+                        size={30}
+                        color={COLORS.white}
+                        name="search1"
+                    />
+                </TouchableOpacity>
+                <TextInput
+                    style={styles.textInput}
+                    onChangeText={(text) => debouncedResults(text, filterOriginal)}
+                    ref={ref}
                 />
-            </TouchableOpacity>
-
-            <TextInput
-                style={styles.textInput}
-                onChangeText={(text) => debouncedResults(text, filterOriginal)}
-            />
+            </View>
+            <Text style={{ ...FONTS.h3, color: COLORS.white }}>Total: {filter.length}</Text>
         </View>
     );
-};
+});
 
 const styles = StyleSheet.create({
-    container: {
+    containerSearch: {
         backgroundColor: COLORS.primary,
         height: 60,
         borderRadius: SIZES.radius,

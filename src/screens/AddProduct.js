@@ -87,11 +87,11 @@ const AddProduct = ({ navigation, route }) => {
                         profit: 0,
                         image: '',
                         description: '',
-                        rate: '',
+                        rate: 0,
                     }}
                     onSubmit={handleAddProduct}
                 >
-                    {({ setFieldValue, values, handleSubmit }) => {
+                    {({ values, handleSubmit }) => {
                         return (
                             <ScrollView style={styles.containerForm}>
                                 <View
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
         marginTop: SIZES.padding,
     },
     addButton: {
-        width: '90%',
+        width: '100%',
         backgroundColor: COLORS.lightGray,
         justifyContent: 'center',
         alignItems: 'center',

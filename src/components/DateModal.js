@@ -6,26 +6,29 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import DatePicker from 'react-native-date-picker';
 import { format } from 'date-fns';
 
-const DateModal = ({ show, setShow, date, setDate, title }) => {
+const DateModal = ({ show, setShow, date, setDate, title, textColor }) => {
 
     return (
         <View
-            style={styles.containerDate}
         >
-            <Text style={{ ...FONTS.h3, marginRight: SIZES.base, color: COLORS.black }}>{title}</Text>
-            {
-                date &&
-                <View style={styles.textDate}>
-                    <Text style={{ ...FONTS.h3, color: COLORS.white }}>{format(date, 'dd/MM/yyyy')}</Text>
-                </View>
-
-            }
-            <TouchableOpacity
-                style={styles.buttonDate}
-                onPress={() => setShow(true)}
+            <Text style={{ ...FONTS.h3, marginBottom: SIZES.base, color: textColor || COLORS.black }}>{title}</Text>
+            <View
+                style={styles.containerDate}
             >
-                <AntDesign name="calendar" size={30} color={COLORS.white} />
-            </TouchableOpacity>
+                {
+                    date &&
+                    <View style={styles.textDate}>
+                        <Text style={{ ...FONTS.h3, color: COLORS.white }}>{format(date, 'dd/MM/yyyy')}</Text>
+                    </View>
+
+                }
+                <TouchableOpacity
+                    style={styles.buttonDate}
+                    onPress={() => setShow(true)}
+                >
+                    <AntDesign name="calendar" size={30} color={COLORS.white} />
+                </TouchableOpacity>
+            </View>
 
             {/* Modal get date */}
             {
@@ -53,13 +56,12 @@ const styles = StyleSheet.create({
     containerDate: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: SIZES.base,
     },
     textDate: {
         flex: 1,
         borderRadius: SIZES.radius,
         backgroundColor: COLORS.lightGray,
-        height: 70,
+        height: 60,
         padding: SIZES.base * 2,
         marginRight: SIZES.base,
         justifyContent: 'center',

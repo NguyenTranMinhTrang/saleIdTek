@@ -55,7 +55,7 @@ const ProductDetail = () => {
                 </TouchableOpacity>
             </View>
 
-            <ModalAdd show={show} setShow={setShow} setFieldValue={setFieldValue} index={index} />
+            <ModalAdd show={show} setShow={setShow} setFieldValue={setFieldValue} index={index} errors={errors} />
 
             <FieldArray
                 name="itemDetail"
@@ -95,7 +95,7 @@ const ProductDetail = () => {
 
                                             onPress={() => {
                                                 setShow(true);
-                                                push({ item: '', amount: 0, priceInput: 0 });
+                                                push({ item: {}, amount: 0, priceInput: 0 });
                                             }}
                                         >
                                             <Text style={{ ...FONTS.h3, color: COLORS.white }}>Add item details</Text>
@@ -116,7 +116,7 @@ const ProductDetail = () => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-end',
     },
     arrayContain: {
         marginVertical: SIZES.padding,
@@ -128,7 +128,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: COLORS.red,
         width: 55,
+        height: 55,
         marginLeft: SIZES.base,
+        marginBottom: 8,
     },
     error: {
         ...FONTS.h3_light,
@@ -141,7 +143,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.lightGray,
         borderRadius: SIZES.radius,
         padding: SIZES.base * 2,
-        height: 70,
+        height: 60,
     },
 });
 

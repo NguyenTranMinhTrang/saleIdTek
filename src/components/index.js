@@ -7,6 +7,7 @@ import DateModal from './DateModal';
 import PickDateModal from './PickDateModal';
 import Chart from './Chart';
 import Search from './Search';
+import BarChartProduct from './BarChartProduct';
 
 export {
     Item,
@@ -18,4 +19,5 @@ export {
     PickDateModal,
     Chart,
     Search,
+    BarChartProduct,
 };

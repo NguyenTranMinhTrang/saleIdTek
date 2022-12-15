@@ -10,19 +10,15 @@ const InputField = ({ field, title, meta, style, textColor, keyBoard }) => {
                 marginVertical: SIZES.base,
             }, style]}
         >
-            <View
-                style={styles.container}
-            >
-                <Text style={[{ ...FONTS.h3, color: COLORS.white }, textColor]}>{title}</Text>
-                <TextInput
-                    numberOfLines={4}
-                    style={styles.textInput}
-                    value={`${field.value}`}
-                    onChangeText={(text) => field.onChange(field.name)(text)}
-                    onBlur={field.onBlur(field.name)}
-                    keyboardType={keyBoard ? keyBoard : 'default'}
-                />
-            </View>
+            <Text style={[{ ...FONTS.h3, color: COLORS.white, marginBottom: SIZES.base }, textColor]}>{title}</Text>
+            <TextInput
+                numberOfLines={4}
+                style={styles.textInput}
+                value={`${field.value}`}
+                onChangeText={(text) => field.onChange(field.name)(text)}
+                onBlur={field.onBlur(field.name)}
+                keyboardType={keyBoard ? keyBoard : 'default'}
+            />
             {
                 error && touched &&
                 <Text style={styles.error}>{error}</Text>
@@ -32,17 +28,12 @@ const InputField = ({ field, title, meta, style, textColor, keyBoard }) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
     textInput: {
-        marginLeft: SIZES.base,
-        flex: 1,
+        // flex: 1,
         borderRadius: SIZES.radius,
         backgroundColor: COLORS.lightGray,
         color: COLORS.white,
-        height: 70,
+        height: 60,
         textAlignVertical: 'center',
         padding: SIZES.base * 2,
         ...FONTS.h3,

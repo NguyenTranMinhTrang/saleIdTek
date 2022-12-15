@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
         marginTop: SIZES.padding,
     },
     buttonUpdate: {
-        width: '90%',
+        width: '100%',
         backgroundColor: COLORS.lightGray,
         justifyContent: 'center',
         alignItems: 'center',

@@ -12,6 +12,7 @@ const Home = ({ navigation }) => {
 
     const [loading, setLoading] = React.useState(true);
     const filter = useSelector((state) => state.product.filter);
+    const text = React.useRef();
 
     React.useEffect(() => {
         const getListData = async () => {
@@ -23,6 +24,7 @@ const Home = ({ navigation }) => {
 
     const reFresh = async () => {
         setLoading(true);
+        text.current.clear();
         const result = await actions.filterRefresh();
         if (result) {
             setLoading(false);
@@ -95,7 +97,7 @@ const Home = ({ navigation }) => {
 
         return (
             <View style={styles.containerProductList}>
-                <Search />
+                <Search ref={text} />
                 {
                     loading
                         ? <ActivityIndicator size="large" color={COLORS.white} />

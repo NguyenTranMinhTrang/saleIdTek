@@ -1,14 +1,13 @@
 import React from 'react';
-import { View, Modal, StyleSheet, Text, Pressable, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Modal, StyleSheet, Text, Pressable, TouchableOpacity } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
 import { COLORS, FONTS, SIZES } from '../constants';
 import Combobox from './Combobox';
 import InputField from './InputField';
 import { FastField } from 'formik';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-const ModalAdd = ({ show, setShow, index, setFieldValue }) => {
-
+const ModalAdd = ({ show, setShow, index, setFieldValue, errors }) => {
+    console.log("Modal add: ", errors);
     return (
         // eslint-disable-next-line react/self-closing-comp
         <Modal
@@ -34,7 +33,12 @@ const ModalAdd = ({ show, setShow, index, setFieldValue }) => {
                     >
                         <Text style={{ ...FONTS.h3, color: COLORS.black, marginRight: SIZES.padding }}>Item: </Text>
                         <Combobox setItem={(item) => setFieldValue(`itemDetail[${index}].item`, item)} />
+
                     </View>
+                    {
+                        (errors.itemDetail && errors.itemDetail[index] && errors.itemDetail[index].item) &&
+                        <Text style={{ ...FONTS.h3, color: COLORS.red, marginRight: 'auto' }}>You must select product</Text>
+                    }
                     <FastField
                         name={`itemDetail[${index}].amount`}
                     >
@@ -102,10 +106,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonAdd: {
-        width: '95%',
+        width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 70,
+        height: 60,
         backgroundColor: COLORS.primary,
         borderRadius: SIZES.radius,
         marginTop: SIZES.base,

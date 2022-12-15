@@ -1,12 +1,13 @@
 import store from '../stores';
 import types from '../types';
-import { getItem } from '../../localStorage';
+import { getItem, getData } from '../../localStorage';
 import _ from 'lodash';
 import { eachDayOfInterval } from 'date-fns';
 
+
 const { dispatch } = store;
 
-export const getData = (data) => ({
+export const getDataList = (data) => ({
     type: types.GET_PRODUCT,
     payload: { ...data },
 });
@@ -114,14 +115,18 @@ export const filterRefresh = (newInput = null) => {
             const products = store.getState().product.products;
             const inputDetail = store.getState().product.inputDetail;
             const newFilter = filterProduct(products, inputDetail, newInput);
-            dispatch(filter({ filter: newFilter }));
+            dispatch(filter({ filter: newFilter, filterOriginal: newFilter }));
             resolve(true);
         }, 500);
     });
 };
 
 export const getDataFromLocalStorage = async () => {
-    const data = await getItem('listData');
+    let data = await getItem('listData');
+    if (!data) {
+        getData();
+        data = await getItem('listData');
+    }
     const filterList = filterProduct(data.products, data.inputDetail);
     const outputs = [];
     const result = eachDayOfInterval({
@@ -160,7 +165,7 @@ export const getDataFromLocalStorage = async () => {
         outputs.push(output);
     }
 
-    dispatch(getData({ ...data, filter: filterList, outputs: outputs, filterOriginal: filterList }));
+    dispatch(getDataList({ ...data, filter: filterList, outputs: outputs, filterOriginal: filterList }));
 };
 
 export const updateProduct = (item) => {

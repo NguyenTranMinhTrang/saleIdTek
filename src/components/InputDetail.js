@@ -17,7 +17,7 @@ const InputDetail = ({ index, remove, insert, detail, setShow, setIndex }) => {
                 style={styles.containerText}
             >
                 {
-                    detail.item.name &&
+                    detail.item &&
                     <Text style={{ ...FONTS.h3, color: COLORS.white }}>{detail.item.name} - {detail.amount} - {detail.priceInput}</Text>
                 }
             </View>
@@ -27,7 +27,7 @@ const InputDetail = ({ index, remove, insert, detail, setShow, setIndex }) => {
                 onPress={() => {
                     setShow(true);
                     setIndex(index + 1);
-                    insert(index + 1, { item: '', amount: 0, priceInput: 0 });
+                    insert(index + 1, { item: {}, amount: 0, priceInput: 0 });
                 }}
             >
                 <Text style={{ ...FONTS.h3, color: COLORS.white }}>+</Text>
