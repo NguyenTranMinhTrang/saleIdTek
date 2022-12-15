@@ -7,7 +7,6 @@ import InputField from './InputField';
 import { FastField } from 'formik';
 
 const ModalAdd = ({ show, setShow, index, setFieldValue, errors }) => {
-    console.log("Modal add: ", errors);
     return (
         // eslint-disable-next-line react/self-closing-comp
         <Modal

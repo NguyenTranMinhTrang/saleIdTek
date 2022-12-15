@@ -7,6 +7,7 @@ import { Item, Search } from '../components';
 import actions from '../redux/actions';
 import { useSelector } from 'react-redux';
 import { getData } from '../localStorage';
+import MainLayout from './MainLayout';
 
 const Home = ({ navigation }) => {
 
@@ -65,6 +66,7 @@ const Home = ({ navigation }) => {
 
     const renderHeader = () => {
         return (
+
             <View
                 style={styles.containerHeader}
             >
@@ -124,19 +126,20 @@ const Home = ({ navigation }) => {
     };
 
     return (
-        <View
-            style={styles.container}
-        >
-            {renderHeader()}
-            {renderListProduct()}
-        </View>
+        <MainLayout>
+            <View
+                style={styles.container}
+            >
+                {renderHeader()}
+                {renderListProduct()}
+            </View>
+        </MainLayout>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.black,
     },
     containerProductList: {
         flex: 0.8,

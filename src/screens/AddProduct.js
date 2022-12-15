@@ -8,6 +8,7 @@ import { InputField } from '../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import actions from '../redux/actions';
+import MainLayout from './MainLayout';
 
 const AddProduct = ({ navigation, route }) => {
     const [loading, setLoading] = React.useState(false);
@@ -71,111 +72,116 @@ const AddProduct = ({ navigation, route }) => {
         );
     };
 
-    return (
-        <SafeAreaView
-            style={styles.container}
-        >
-            {renderHeader()}
-            <KeyboardAwareScrollView>
-                <Formik
-                    innerRef={formik}
-                    enableReinitialize={true}
-                    validationSchema={validate}
-                    validateOnChange={false}
-                    initialValues={{
-                        name: '',
-                        profit: 0,
-                        image: '',
-                        description: '',
-                        rate: 0,
-                    }}
-                    onSubmit={handleAddProduct}
-                >
-                    {({ values, handleSubmit }) => {
-                        return (
-                            <ScrollView style={styles.containerForm}>
+    const renderForm = () => (
+        <KeyboardAwareScrollView>
+            <Formik
+                innerRef={formik}
+                enableReinitialize={true}
+                validationSchema={validate}
+                validateOnChange={false}
+                initialValues={{
+                    name: '',
+                    profit: 0,
+                    image: '',
+                    description: '',
+                    rate: 0,
+                }}
+                onSubmit={handleAddProduct}
+            >
+                {({ values, handleSubmit }) => {
+                    return (
+                        <ScrollView style={styles.containerForm}>
+                            <View
+                                style={{
+                                    padding: SIZES.padding,
+                                }}
+                            >
                                 <View
-                                    style={{
-                                        padding: SIZES.padding,
-                                    }}
+                                    style={styles.containerImage}
                                 >
-                                    <View
-                                        style={styles.containerImage}
+                                    <Text style={{ ...FONTS.h3, marginRight: SIZES.base, color: COLORS.white }}>Image: </Text>
+
+                                    {
+                                        values.image &&
+                                        <Image
+                                            source={{ uri: values.image }}
+                                            style={styles.image}
+                                            resizeMode="cover"
+                                        />
+                                    }
+                                    <TouchableOpacity
+                                        style={styles.buttonCamera}
+
+                                        onPress={() => setShow(true)}
                                     >
-                                        <Text style={{ ...FONTS.h3, marginRight: SIZES.base, color: COLORS.white }}>Image: </Text>
+                                        <AntDesign name="camera" size={30} color={COLORS.white} />
+                                    </TouchableOpacity>
 
-                                        {
-                                            values.image &&
-                                            <Image
-                                                source={{ uri: values.image }}
-                                                style={styles.image}
-                                                resizeMode="cover"
-                                            />
-                                        }
-                                        <TouchableOpacity
-                                            style={styles.buttonCamera}
-
-                                            onPress={() => setShow(true)}
-                                        >
-                                            <AntDesign name="camera" size={30} color={COLORS.white} />
-                                        </TouchableOpacity>
-
-                                    </View>
-                                    {/* name */}
-                                    <FastField
-                                        name="name"
-                                    >
-                                        {(props) => (
-                                            <InputField title="Name: " {...props} />
-                                        )}
-                                    </FastField>
-
-                                    {/* description */}
-                                    <FastField
-                                        name="description"
-                                    >
-                                        {(props) => (
-                                            <InputField title="Description: " {...props} />
-                                        )}
-                                    </FastField>
-
-                                    {/* profit */}
-                                    <FastField
-                                        name="profit"
-                                    >
-                                        {(props) => (
-                                            <InputField keyBoard="number-pad" title="Profit: " {...props} />
-                                        )}
-                                    </FastField>
-
-                                    <View
-                                        style={styles.containerAdd}
-                                    >
-                                        <TouchableOpacity
-                                            style={styles.addButton}
-                                            onPress={handleSubmit}
-                                        >
-                                            {
-                                                loading
-                                                    ? <ActivityIndicator size="large" color={COLORS.white} />
-                                                    : <Text style={{ ...FONTS.h3, color: COLORS.white }}>Add</Text>
-                                            }
-                                        </TouchableOpacity>
-                                    </View>
                                 </View>
-                            </ScrollView>
-                        );
-                    }}
-                </Formik>
-            </KeyboardAwareScrollView>
-        </SafeAreaView>
+                                {/* name */}
+                                <FastField
+                                    name="name"
+                                >
+                                    {(props) => (
+                                        <InputField title="Name: " {...props} />
+                                    )}
+                                </FastField>
+
+                                {/* description */}
+                                <FastField
+                                    name="description"
+                                >
+                                    {(props) => (
+                                        <InputField title="Description: " {...props} />
+                                    )}
+                                </FastField>
+
+                                {/* profit */}
+                                <FastField
+                                    name="profit"
+                                >
+                                    {(props) => (
+                                        <InputField keyBoard="number-pad" title="Profit: " {...props} />
+                                    )}
+                                </FastField>
+
+                                <View
+                                    style={styles.containerAdd}
+                                >
+                                    <TouchableOpacity
+                                        style={styles.addButton}
+                                        onPress={handleSubmit}
+                                    >
+                                        {
+                                            loading
+                                                ? <ActivityIndicator size="large" color={COLORS.white} />
+                                                : <Text style={{ ...FONTS.h3, color: COLORS.white }}>Add</Text>
+                                        }
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </ScrollView>
+                    );
+                }}
+            </Formik>
+        </KeyboardAwareScrollView>
+    );
+
+    return (
+        <MainLayout>
+            <View
+                style={styles.container}
+            >
+                {renderHeader()}
+                {renderForm()}
+            </View>
+        </MainLayout>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.black,
     },
     containerHeader: {
         flexDirection: 'row',

@@ -7,6 +7,7 @@ import { SIZES, COLORS, FONTS } from '../constants';
 import { InputField, ProductDetail, DateModal } from '../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import actions from '../redux/actions';
+import MainLayout from './MainLayout';
 
 const Input = ({ navigation }) => {
     const [loading, setLoading] = React.useState(false);
@@ -71,96 +72,100 @@ const Input = ({ navigation }) => {
         );
     };
 
-    return (
-        <View
-            style={styles.container}
-        >
-            {renderHeader()}
-            <KeyboardAwareScrollView>
-                <Formik
-                    innerRef={formik}
-                    enableReinitialize={true}
-                    validationSchema={validate}
-                    validateOnChange={false}
-                    initialValues={{
-                        date: new Date(),
-                        show: false,
-                        itemDetail: [],
-                        delete: 1,
-                        status: '',
-                    }}
-                    onSubmit={handleAddInput}
-                >
-                    {({ setFieldValue, values, handleSubmit, errors, touched }) => {
-                        console.log('errors input: ', errors);
-                        return (
-                            <View style={styles.containerForm}>
-                                <ScrollView>
-                                    <View
-                                        style={{
-                                            paddingHorizontal: SIZES.padding,
-                                            paddingBottom: SIZES.padding,
-                                        }}
+    const renderForm = () => (
+        <KeyboardAwareScrollView>
+            <Formik
+                innerRef={formik}
+                enableReinitialize={true}
+                validationSchema={validate}
+                validateOnChange={false}
+                initialValues={{
+                    date: new Date(),
+                    show: false,
+                    itemDetail: [],
+                    delete: 1,
+                    status: '',
+                }}
+                onSubmit={handleAddInput}
+            >
+                {({ setFieldValue, values, handleSubmit, errors }) => {
+                    return (
+                        <View style={styles.containerForm}>
+                            <ScrollView>
+                                <View
+                                    style={{
+                                        paddingHorizontal: SIZES.padding,
+                                        paddingBottom: SIZES.padding,
+                                    }}
+                                >
+                                    {/* date */}
+
+                                    <DateModal
+                                        textColor={COLORS.white}
+                                        show={values.show}
+                                        date={values.date}
+                                        setShow={(show) => setFieldValue('show', show)}
+                                        setDate={(date) => setFieldValue('date', date)}
+                                        title={'Date: '}
+                                    />
+
+                                    {/*  product list*/}
+
+                                    <ProductDetail />
+
+                                    {
+                                        (errors.itemDetail && !Array.isArray(errors.itemDetail))
+                                        &&
+                                        <Text style={{ ...FONTS.h3, color: COLORS.red }}>{errors.itemDetail}</Text>
+                                    }
+
+                                    {/* status */}
+                                    <FastField
+                                        name="status"
                                     >
-                                        {/* date */}
+                                        {(props) => (
+                                            <InputField title="Status: " {...props} />
+                                        )}
+                                    </FastField>
 
-                                        <DateModal
-                                            textColor={COLORS.white}
-                                            show={values.show}
-                                            date={values.date}
-                                            setShow={(show) => setFieldValue('show', show)}
-                                            setDate={(date) => setFieldValue('date', date)}
-                                            title={'Date: '}
-                                        />
-
-                                        {/*  product list*/}
-
-                                        <ProductDetail />
-
-                                        {
-                                            (errors.itemDetail && !Array.isArray(errors.itemDetail))
-                                            &&
-                                            <Text style={{ ...FONTS.h3, color: COLORS.red }}>{errors.itemDetail}</Text>
-                                        }
-
-                                        {/* status */}
-                                        <FastField
-                                            name="status"
+                                    <View
+                                        style={styles.containerAdd}
+                                    >
+                                        <TouchableOpacity
+                                            style={styles.addButton}
+                                            onPress={handleSubmit}
                                         >
-                                            {(props) => (
-                                                <InputField title="Status: " {...props} />
-                                            )}
-                                        </FastField>
-
-                                        <View
-                                            style={styles.containerAdd}
-                                        >
-                                            <TouchableOpacity
-                                                style={styles.addButton}
-                                                onPress={handleSubmit}
-                                            >
-                                                {
-                                                    loading
-                                                        ? <ActivityIndicator size="large" color={COLORS.white} />
-                                                        : <Text style={{ ...FONTS.h3, color: COLORS.white }}>Add</Text>
-                                                }
-                                            </TouchableOpacity>
-                                        </View>
+                                            {
+                                                loading
+                                                    ? <ActivityIndicator size="large" color={COLORS.white} />
+                                                    : <Text style={{ ...FONTS.h3, color: COLORS.white }}>Add</Text>
+                                            }
+                                        </TouchableOpacity>
                                     </View>
-                                </ScrollView>
-                            </View>
-                        );
-                    }}
-                </Formik>
-            </KeyboardAwareScrollView>
-        </View>
+                                </View>
+                            </ScrollView>
+                        </View>
+                    );
+                }}
+            </Formik>
+        </KeyboardAwareScrollView>
+    );
+
+    return (
+        <MainLayout>
+            <View
+                style={styles.container}
+            >
+                {renderHeader()}
+                {renderForm()}
+            </View>
+        </MainLayout>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.black,
     },
     containerHeader: {
         flexDirection: 'row',

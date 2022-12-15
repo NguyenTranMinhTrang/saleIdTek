@@ -121,8 +121,6 @@ export default function (state = initialState, action) {
                 },
             });
 
-            console.log("New state week: ", newStateWeek);
-
             return { ...newStateWeek };
 
         case types.CHART_MONTH:
@@ -142,8 +140,6 @@ export default function (state = initialState, action) {
                     },
                 },
             });
-
-            console.log("New state month: ", newStateMonth);
 
             return { ...newStateMonth };
         default:

@@ -14,8 +14,6 @@ const PickDateModal = ({ show, setShow, state, setDateChoose }) => {
     const [showStart, setShowStart] = React.useState(false);
     const [showEnd, setShowEnd] = React.useState(false);
 
-    console.log(differenceInWeeks(start, end));
-
     return (
         // eslint-disable-next-line react/self-closing-comp
         <Modal

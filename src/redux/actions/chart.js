@@ -50,9 +50,6 @@ export const chartDays = (start, end) => {
         return { y: total };
     });
 
-    console.log('get chart by date: ', result);
-    console.log('label: ', xLabel);
-
     dispatch(getChartByDate({ data: result, label: xLabel }));
 };
 
@@ -91,9 +88,6 @@ export const chartWeeks = (start, end) => {
         return { y: total };
     });
 
-    console.log('label week: ', xLabel);
-    console.log('get chart by week: ', result);
-
     dispatch(getChartByWeek({ data: result, label: xLabel }));
 };
 
@@ -131,9 +125,6 @@ export const chartMonths = (start, end) => {
 
         return { y: total };
     });
-
-    console.log('label month: ', xLabel);
-    console.log('get chart by month: ', result);
 
     dispatch(getChartByMonth({ data: result, label: xLabel }));
 };

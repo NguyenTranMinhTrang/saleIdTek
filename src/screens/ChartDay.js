@@ -5,6 +5,7 @@ import { PickDateModal, Chart } from '../components';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { format } from 'date-fns';
 import actions from '../redux/actions';
+import MainLayout from './MainLayout';
 
 const ChartDay = ({ navigation, route }) => {
 
@@ -38,69 +39,70 @@ const ChartDay = ({ navigation, route }) => {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.containHeader}>
-                <TouchableOpacity
-                    style={styles.buttonBack}
-                    onPress={() => navigation.goBack()}
-                >
-                    <AntDesign
-                        size={30}
-                        name="arrowleft"
-                        color={COLORS.white}
-                    />
-                </TouchableOpacity>
+        <MainLayout>
+            <View style={styles.container}>
+                <View style={styles.containHeader}>
+                    <TouchableOpacity
+                        style={styles.buttonBack}
+                        onPress={() => navigation.goBack()}
+                    >
+                        <AntDesign
+                            size={30}
+                            name="arrowleft"
+                            color={COLORS.white}
+                        />
+                    </TouchableOpacity>
 
-                {
-                    data?.state === 'date' ?
-                        <Text style={{ ...FONTS.h2, color: COLORS.white }}>Doanh Thu Theo Ngày</Text>
-                        :
-                        data?.state === 'week' ?
-                            <Text style={{ ...FONTS.h2, color: COLORS.white }}>Doanh Thu Theo Tuần</Text>
+                    {
+                        data?.state === 'date' ?
+                            <Text style={{ ...FONTS.h2, color: COLORS.white }}>Doanh Thu Theo Ngày</Text>
                             :
-                            <Text style={{ ...FONTS.h2, color: COLORS.white }}>Doanh Thu Theo Tháng</Text>
-                }
-            </View>
+                            data?.state === 'week' ?
+                                <Text style={{ ...FONTS.h2, color: COLORS.white }}>Doanh Thu Theo Tuần</Text>
+                                :
+                                <Text style={{ ...FONTS.h2, color: COLORS.white }}>Doanh Thu Theo Tháng</Text>
+                    }
+                </View>
 
-            {/* Modal */}
+                {/* Modal */}
 
-            <PickDateModal
-                show={show}
-                setShow={setShow}
-                state={data?.state}
-                setDateChoose={setFilterDate}
-            />
+                <PickDateModal
+                    show={show}
+                    setShow={setShow}
+                    state={data?.state}
+                    setDateChoose={setFilterDate}
+                />
 
-            {/* Button Filter */}
+                {/* Button Filter */}
 
-            <View
-                style={styles.containViewButton}
-            >
-                <TouchableOpacity
-                    style={styles.containButton}
-                    onPress={() => setShow(true)}
+                <View
+                    style={styles.containViewButton}
                 >
-                    <AntDesign
-                        size={35}
-                        name="filter"
-                        color={COLORS.white}
-                    />
-                </TouchableOpacity>
-                <Text style={{ ...FONTS.h3, color: COLORS.white }}>{data?.date}</Text>
-            </View>
+                    <TouchableOpacity
+                        style={styles.containButton}
+                        onPress={() => setShow(true)}
+                    >
+                        <AntDesign
+                            size={35}
+                            name="filter"
+                            color={COLORS.white}
+                        />
+                    </TouchableOpacity>
+                    <Text style={{ ...FONTS.h3, color: COLORS.white }}>{data?.date}</Text>
+                </View>
 
-            {/* Chart */}
-            <View style={styles.containChart} >
-                <Chart />
+                {/* Chart */}
+                <View style={styles.containChart} >
+                    <Chart />
+                </View>
             </View>
-        </View>
+        </MainLayout>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.black,
         paddingVertical: SIZES.padding,
     },
     containHeader: { alignItems: 'center', flexDirection: 'row', justifyContent: 'center' },
@@ -117,7 +119,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.primary,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: SIZES.radius
+        borderRadius: SIZES.radius,
     },
     containChart: {
         height: 500,

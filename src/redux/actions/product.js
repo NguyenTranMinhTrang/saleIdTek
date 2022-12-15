@@ -244,9 +244,6 @@ export const addInput = (input) => {
                 };
             });
 
-            console.log(newInput);
-            console.log(newInputDetail);
-
             inputs.push(newInput);
             const newConcatArray = _.concat(inputDetail, newInputDetail);
             dispatch(addInputList({ inputs, inputDetail: newConcatArray }));

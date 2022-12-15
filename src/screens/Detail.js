@@ -9,6 +9,7 @@ import debounce from 'lodash.debounce';
 import * as yup from 'yup';
 import { InputField } from '../components';
 import actions from '../redux/actions';
+import MainLayout from './MainLayout';
 
 const Detail = ({ navigation, route }) => {
 
@@ -149,17 +150,18 @@ const Detail = ({ navigation, route }) => {
     };
 
     return (
-        <View style={styles.container}>
-            {renderHeader()}
-            {renderForm()}
-        </View>
+        <MainLayout>
+            <View style={styles.container}>
+                {renderHeader()}
+                {renderForm()}
+            </View>
+        </MainLayout>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.black,
     },
     containerHeader: {
         height: SIZES.height * 0.4,

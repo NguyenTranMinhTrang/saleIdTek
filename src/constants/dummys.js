@@ -2,7 +2,6 @@ import images from './images';
 import _ from 'lodash';
 
 const genarateData = () => {
-    console.log(images.productImage);
     const products = [];
     const inputs = [];
     let j = 0;
