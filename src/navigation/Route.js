@@ -3,12 +3,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Tabs from './Tabs';
 import { Detail, AddProduct, ChartDay } from '../screens';
+import { navigationRef } from '../RootNavigation';
 
 const Stack = createNativeStackNavigator();
 
 const Route = () => {
     return (
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
             <Stack.Navigator
                 initialRouteName="Tabs"
                 screenOptions={{

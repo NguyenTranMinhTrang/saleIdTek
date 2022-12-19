@@ -13,6 +13,8 @@ import MainLayout from './MainLayout';
 
 const Detail = ({ navigation, route }) => {
 
+    console.log('Param: ', route.params);
+
     const [loading, setLoading] = React.useState(false);
 
     const formik = React.useRef();
@@ -34,7 +36,6 @@ const Detail = ({ navigation, route }) => {
 
     const handleCancel = () => {
         navigation.goBack();
-        route.params.reFresh();
     };
 
     const renderHeader = () => {

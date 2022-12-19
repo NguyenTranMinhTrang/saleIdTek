@@ -208,12 +208,13 @@ export const addProduct = (product) => {
         setTimeout(() => {
             const products = store.getState().product.products;
             const id = Date.now();
-            products.unshift({
+            let newProduct = {
                 id: id,
                 ...product,
-            });
+            };
+            products.unshift(newProduct);
             dispatch(addProductList({ products }));
-            resolve({ code: 1, message: 'Success !' });
+            resolve({ code: 1, message: 'Success !', data: newProduct });
         }, 500);
     });
 };

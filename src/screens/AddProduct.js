@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, SafeAreaView, Image, ScrollView, TouchableOpacity, ActivityIndicator, Alert, StyleSheet } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator, Alert, StyleSheet } from 'react-native';
 import { Formik, FastField } from 'formik';
 import debounce from 'lodash.debounce';
 import * as yup from 'yup';
@@ -9,6 +9,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import actions from '../redux/actions';
 import MainLayout from './MainLayout';
+import { sendNotification } from '../utils/pushNotifycation';
 
 const AddProduct = ({ navigation, route }) => {
     const [loading, setLoading] = React.useState(false);
@@ -33,7 +34,6 @@ const AddProduct = ({ navigation, route }) => {
 
     const handleCancel = () => {
         navigation.goBack();
-        route.params.reFresh();
     };
 
     const handleAddProduct = async (values) => {
@@ -49,6 +49,7 @@ const AddProduct = ({ navigation, route }) => {
                 { cancelable: false }
             );
         }
+        sendNotification('Hello', 'Add Product Success !', { ...result.data, type: 'Detail' });
         setLoading(false);
     };
 

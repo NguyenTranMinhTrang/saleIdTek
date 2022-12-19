@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator, FlatList, StyleSheet, Alert } from 'react-native';
+import { View, Text, BackHandler, TouchableOpacity, ActivityIndicator, FlatList, StyleSheet, Alert } from 'react-native';
 import { COLORS, FONTS, SIZES } from '../constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -23,6 +23,16 @@ const Home = ({ navigation }) => {
         getListData();
     }, []);
 
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            reFresh();
+        });
+
+        return unsubscribe;
+    }, [navigation]);
+
+
+
     const reFresh = async () => {
         setLoading(true);
         text.current.clear();
@@ -42,11 +52,11 @@ const Home = ({ navigation }) => {
     };
 
     const onPress = (item) => {
-        navigation.navigate('Detail', { item, reFresh });
+        navigation.navigate('Detail', { item });
     };
 
     const onPressAdd = () => {
-        navigation.navigate('AddProduct', { reFresh });
+        navigation.navigate('AddProduct');
     };
 
     const deleteProduct = (id) => {
