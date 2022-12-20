@@ -1,6 +1,9 @@
 import messaging from '@react-native-firebase/messaging';
+import { addNotification, updateNotification, getNotificationById } from '../firebase/crud';
 import { getItem, setItem } from '../localStorage';
 import { sendNotificationLocal } from './pushNotificationLocal';
+import { intervalToDuration } from 'date-fns';
+import { Timestamp } from 'firebase/firestore';
 
 const FIREBASE_API_KEY = 'AAAAv0YTFEo:APA91bFaSDWQKIOITcMfCVFqitpDIKKNM3QbjaCe_KdqkfxudEYYmDq_FnMQw3VHMUn561JhRZDrgaNGbByBVDzb58xZtFeRtIDGmpLgzpAvlTpStrS923nqzKK2pxunhzdesC-ZXzm-';
 let headers = new Headers({
@@ -29,10 +32,65 @@ export const getToken = async () => {
             let fcmtoken = await messaging().getToken();
             if (fcmtoken) {
                 token = fcmtoken;
-                await setItem('fcmtoken', fcmtoken);
+                let id = (Date.now()).toString();
+                const result = await addNotification(fcmtoken, id);
+                if (result.code === 1) {
+                    await setItem('fcmtoken', {
+                        id: id,
+                        token: fcmtoken,
+                    });
+                }
             }
         } catch (error) {
             console.log('Error in fcmtoken', error);
+        }
+    }
+    else {
+        console.log('Token from local: ', token);
+        const tokenFromDatabase = await getNotificationById(token.id);
+        console.log('tokenFromDatabase: ', tokenFromDatabase);
+        if (tokenFromDatabase.code === 1) {
+            console.log(tokenFromDatabase.data.date);
+            let date = (tokenFromDatabase.data.date).toDate();
+            console.log('date: ', date);
+
+            const distance = intervalToDuration({
+                start: date,
+                end: new Date(),
+            });
+
+            if (distance.months >= 2) {
+                console.log('here');
+                let newToken = await messaging().getToken();
+                const result = await updateNotification(token.id, {
+                    token: newToken,
+                    date: Timestamp.fromDate(new Date()),
+                });
+                if (result.code === 1) {
+                    await setItem('fcmtoken', {
+                        id: token.id,
+                        token: newToken,
+                    });
+                }
+                else {
+                    console.log(result.error);
+                }
+            }
+            else {
+                const result = await updateNotification(token.id, {
+                    date: Timestamp.fromDate(new Date()),
+                });
+                if (result.code === 1) {
+                    console.log(result.message);
+                }
+                else {
+                    console.log(result.error);
+                }
+            }
+
+        }
+        else {
+            console.log('Get error: ', tokenFromDatabase.error);
         }
     }
 
@@ -69,7 +127,7 @@ export const notificationListener = () => {
 export const sendNotification = async (title, body, data) => {
     const message = {
         registration_ids: [
-            token,
+            token.token,
         ],
         notification: {
             title: title,
