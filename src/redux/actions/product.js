@@ -214,7 +214,7 @@ export const addProduct = (product) => {
             };
             products.unshift(newProduct);
             dispatch(addProductList({ products }));
-            resolve({ code: 1, message: 'Success !', data: newProduct });
+            resolve({ code: 1, message: 'Success !', id: id });
         }, 500);
     });
 };

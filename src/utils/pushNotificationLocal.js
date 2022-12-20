@@ -6,8 +6,7 @@ PushNotification.configure({
     onNotification: function (notification) {
         if (notification.userInteraction) {
             if (notification.data && notification.data.type === 'Detail') {
-                console.log('before navigate: ', notification);
-                navigate(notification.data.type, { item: notification.data });
+                navigate('Home', { id: Number(notification.data.id), screen: 'Detail' });
             }
         }
     },
@@ -30,7 +29,6 @@ PushNotification.createChannel(
 );
 
 export const sendNotificationLocal = (remoteMessage) => {
-    console.log('Local: ', remoteMessage);
     PushNotification.localNotification({
         channelId: 'channel-id',
         channelName: 'My channel',

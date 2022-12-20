@@ -9,11 +9,18 @@ import { useSelector } from 'react-redux';
 import { getData } from '../localStorage';
 import MainLayout from './MainLayout';
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
 
     const [loading, setLoading] = React.useState(true);
     const filter = useSelector((state) => state.product.filter);
     const text = React.useRef();
+
+    React.useEffect(() => {
+        if (route.params && route.params.screen) {
+            const { id, screen } = route.params;
+            navigation.navigate(screen, { id, reFresh });
+        }
+    }, [route.params]);
 
     React.useEffect(() => {
         const getListData = async () => {
@@ -22,16 +29,6 @@ const Home = ({ navigation }) => {
         };
         getListData();
     }, []);
-
-    React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            reFresh();
-        });
-
-        return unsubscribe;
-    }, [navigation]);
-
-
 
     const reFresh = async () => {
         setLoading(true);
@@ -52,11 +49,11 @@ const Home = ({ navigation }) => {
     };
 
     const onPress = (item) => {
-        navigation.navigate('Detail', { item });
+        navigation.navigate('Detail', { id: item.id, reFresh: reFresh });
     };
 
     const onPressAdd = () => {
-        navigation.navigate('AddProduct');
+        navigation.navigate('AddProduct', { reFresh });
     };
 
     const deleteProduct = (id) => {

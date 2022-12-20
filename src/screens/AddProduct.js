@@ -13,8 +13,6 @@ import { sendNotification } from '../utils/pushNotifycation';
 
 const AddProduct = ({ navigation, route }) => {
     const [loading, setLoading] = React.useState(false);
-    const [show, setShow] = React.useState(false);
-
     const formik = React.useRef();
 
     React.useEffect(() => {
@@ -34,6 +32,7 @@ const AddProduct = ({ navigation, route }) => {
 
     const handleCancel = () => {
         navigation.goBack();
+        route.params.reFresh();
     };
 
     const handleAddProduct = async (values) => {
@@ -49,7 +48,7 @@ const AddProduct = ({ navigation, route }) => {
                 { cancelable: false }
             );
         }
-        sendNotification('Hello', 'Add Product Success !', { ...result.data, type: 'Detail' });
+        sendNotification('Hello', 'Add Product Success !', { id: result.id, type: 'Detail' });
         setLoading(false);
     };
 
@@ -112,8 +111,6 @@ const AddProduct = ({ navigation, route }) => {
                                     }
                                     <TouchableOpacity
                                         style={styles.buttonCamera}
-
-                                        onPress={() => setShow(true)}
                                     >
                                         <AntDesign name="camera" size={30} color={COLORS.white} />
                                     </TouchableOpacity>

@@ -20,6 +20,5 @@ export const clearAsyncStorate = () => {
 
 export const getData = () => {
     let data = genarateData();
-    console.log('Data genarate');
     setItem('listData', data);
 };

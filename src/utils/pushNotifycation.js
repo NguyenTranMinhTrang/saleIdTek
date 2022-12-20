@@ -28,7 +28,6 @@ export const getToken = async () => {
         try {
             let fcmtoken = await messaging().getToken();
             if (fcmtoken) {
-                console.log('New token: ', fcmtoken);
                 token = fcmtoken;
                 await setItem('fcmtoken', fcmtoken);
             }
@@ -36,6 +35,8 @@ export const getToken = async () => {
             console.log('Error in fcmtoken', error);
         }
     }
+
+    console.log('Done token: ', token);
 };
 
 export const notificationListener = () => {
@@ -68,7 +69,7 @@ export const notificationListener = () => {
 export const sendNotification = async (title, body, data) => {
     const message = {
         registration_ids: [
-            'dtK_DEayRO2QbMZlYzK1y0:APA91bFT6kjoNXsyXu708CrGRQg66JlfLs1_cshEwck_ibLjAGksooNa7OvkNyv7ARU5a6VRxlywgP4_vBdkH_TLnFroEIhBMYQiXZcuiv41kXWgVG0T3KQqH3wPet14FeUZ0sQM2ccu',
+            token,
         ],
         notification: {
             title: title,

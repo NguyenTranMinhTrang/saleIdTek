@@ -10,14 +10,22 @@ import * as yup from 'yup';
 import { InputField } from '../components';
 import actions from '../redux/actions';
 import MainLayout from './MainLayout';
+import { useSelector } from 'react-redux';
+import _ from 'lodash';
 
 const Detail = ({ navigation, route }) => {
-
-    console.log('Param: ', route.params);
-
+    const products = useSelector((state) => state.product.products);
+    const [product, setProduct] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
-
     const formik = React.useRef();
+
+    React.useEffect(() => {
+        const id = route.params.id;
+        const data = _.find(products, { id: id });
+        if (data) {
+            setProduct(data);
+        }
+    }, [products]);
 
     React.useEffect(() => {
         debouncedValidate(formik.current?.values);
@@ -36,6 +44,7 @@ const Detail = ({ navigation, route }) => {
 
     const handleCancel = () => {
         navigation.goBack();
+        route.params.reFresh();
     };
 
     const renderHeader = () => {
@@ -63,89 +72,89 @@ const Detail = ({ navigation, route }) => {
         );
     };
 
-
-
     const renderForm = () => {
         return (
             <ScrollView style={styles.containerForm}>
-                <KeyboardAwareScrollView
-                    style={{
-                        padding: SIZES.padding,
-                    }}
-                >
-                    <Formik
-                        innerRef={formik}
-                        enableReinitialize={true}
-                        validationSchema={validate}
-                        validateOnChange={false}
-                        initialValues={{
-                            ...route.params.item,
-                        }}
-                        onSubmit={async (values) => {
-                            setLoading(true);
-                            const result = await actions.updateProduct(values);
-                            setLoading(false);
-                            if (result && result.code === 1) {
-                                Alert.alert('Sucess', 'Do you want to continue ?',
-                                    [
-                                        { text: 'Cancel', onPress: handleCancel },
-                                        { text: 'OK', onPress: () => console.log('OK Pressed') },
-                                    ],
-                                    { cancelable: false }
-                                );
-                            }
+                {
+                    product && <KeyboardAwareScrollView
+                        style={{
+                            padding: SIZES.padding,
                         }}
                     >
-                        {({ handleSubmit }) => {
-                            return (
-                                <>
-                                    {/* name */}
-                                    <FastField
-                                        name="name"
-                                    >
-                                        {(props) => (
-                                            <InputField title="Name: " {...props} />
-                                        )}
-                                    </FastField>
+                        <Formik
+                            innerRef={formik}
+                            enableReinitialize={true}
+                            validationSchema={validate}
+                            validateOnChange={false}
+                            initialValues={{
+                                ...product,
+                            }}
+                            onSubmit={async (values) => {
+                                setLoading(true);
+                                const result = await actions.updateProduct(values);
+                                setLoading(false);
+                                if (result && result.code === 1) {
+                                    Alert.alert('Sucess', 'Do you want to continue ?',
+                                        [
+                                            { text: 'Cancel', onPress: handleCancel },
+                                            { text: 'OK', onPress: () => console.log('OK Pressed') },
+                                        ],
+                                        { cancelable: false }
+                                    );
+                                }
+                            }}
+                        >
+                            {({ handleSubmit }) => {
+                                return (
+                                    <>
+                                        {/* name */}
+                                        <FastField
+                                            name="name"
+                                        >
+                                            {(props) => (
+                                                <InputField title="Name: " {...props} />
+                                            )}
+                                        </FastField>
 
-                                    {/* description */}
-                                    <FastField
-                                        name="description"
-                                    >
-                                        {(props) => (
-                                            <InputField title="Description: " {...props} />
-                                        )}
-                                    </FastField>
+                                        {/* description */}
+                                        <FastField
+                                            name="description"
+                                        >
+                                            {(props) => (
+                                                <InputField title="Description: " {...props} />
+                                            )}
+                                        </FastField>
 
-                                    {/* price */}
-                                    <FastField
-                                        name="profit"
-                                    >
-                                        {(props) => (
-                                            <InputField title="Profit: " {...props} keyBoard="number-pad" />
-                                        )}
-                                    </FastField>
+                                        {/* price */}
+                                        <FastField
+                                            name="profit"
+                                        >
+                                            {(props) => (
+                                                <InputField title="Profit: " {...props} keyBoard="number-pad" />
+                                            )}
+                                        </FastField>
 
-                                    <View
-                                        style={styles.containerButtonUpdate}
-                                    >
-                                        {
-                                            loading ?
-                                                <ActivityIndicator size="large" color={COLORS.white} />
-                                                :
-                                                <TouchableOpacity
-                                                    style={styles.buttonUpdate}
-                                                    onPress={handleSubmit}
-                                                >
-                                                    <Text style={{ ...FONTS.h3, color: COLORS.white }}>Update</Text>
-                                                </TouchableOpacity>
-                                        }
-                                    </View>
-                                </>
-                            );
-                        }}
-                    </Formik>
-                </KeyboardAwareScrollView>
+                                        <View
+                                            style={styles.containerButtonUpdate}
+                                        >
+                                            {
+                                                loading ?
+                                                    <ActivityIndicator size="large" color={COLORS.white} />
+                                                    :
+                                                    <TouchableOpacity
+                                                        style={styles.buttonUpdate}
+                                                        onPress={handleSubmit}
+                                                    >
+                                                        <Text style={{ ...FONTS.h3, color: COLORS.white }}>Update</Text>
+                                                    </TouchableOpacity>
+                                            }
+                                        </View>
+                                    </>
+                                );
+                            }}
+                        </Formik>
+                    </KeyboardAwareScrollView>
+                }
             </ScrollView >
         );
     };
