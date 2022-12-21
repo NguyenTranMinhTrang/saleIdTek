@@ -4,7 +4,7 @@ import { Formik, FastField } from 'formik';
 import debounce from 'lodash.debounce';
 import * as yup from 'yup';
 import { SIZES, COLORS, FONTS } from '../constants';
-import { InputField } from '../components';
+import { InputField, ModalPickImage } from '../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import actions from '../redux/actions';
@@ -12,6 +12,7 @@ import MainLayout from './MainLayout';
 import { sendNotification } from '../utils/pushNotifycation';
 
 const AddProduct = ({ navigation, route }) => {
+    const [show, setShow] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const formik = React.useRef();
 
@@ -88,7 +89,7 @@ const AddProduct = ({ navigation, route }) => {
                 }}
                 onSubmit={handleAddProduct}
             >
-                {({ values, handleSubmit }) => {
+                {({ values, handleSubmit, setFieldValue }) => {
                     return (
                         <ScrollView style={styles.containerForm}>
                             <View
@@ -96,6 +97,8 @@ const AddProduct = ({ navigation, route }) => {
                                     padding: SIZES.padding,
                                 }}
                             >
+                                <ModalPickImage show={show} setShow={setShow} setImage={(uri) => setFieldValue('image', uri)} />
+
                                 <View
                                     style={styles.containerImage}
                                 >
@@ -111,6 +114,7 @@ const AddProduct = ({ navigation, route }) => {
                                     }
                                     <TouchableOpacity
                                         style={styles.buttonCamera}
+                                        onPress={() => setShow(true)}
                                     >
                                         <AntDesign name="camera" size={30} color={COLORS.white} />
                                     </TouchableOpacity>

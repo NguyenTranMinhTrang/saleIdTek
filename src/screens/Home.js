@@ -1,12 +1,10 @@
 import React from 'react';
-import { View, Text, BackHandler, TouchableOpacity, ActivityIndicator, FlatList, StyleSheet, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, FlatList, StyleSheet, Alert } from 'react-native';
 import { COLORS, FONTS, SIZES } from '../constants';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Item, Search } from '../components';
 import actions from '../redux/actions';
 import { useSelector } from 'react-redux';
-import { getData } from '../localStorage';
 import MainLayout from './MainLayout';
 
 const Home = ({ navigation, route }) => {
@@ -80,9 +78,9 @@ const Home = ({ navigation, route }) => {
                 <TouchableOpacity
                     style={styles.buttonRefresh}
 
-                    onPress={() => getData()}
+                    onPress={() => navigation.navigate('PickFile')}
                 >
-                    <Ionicons name="refresh" color={COLORS.white} size={35} />
+                    <AntDesign name="addfile" color={COLORS.white} size={35} />
                 </TouchableOpacity>
 
                 <Text style={{ ...FONTS.h2, color: COLORS.white }}>List Product</Text>

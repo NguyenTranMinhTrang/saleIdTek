@@ -8,6 +8,7 @@ import PickDateModal from './PickDateModal';
 import Chart from './Chart';
 import Search from './Search';
 import BarChartProduct from './BarChartProduct';
+import ModalPickImage from './ModalPickImage';
 
 export {
     Item,
@@ -20,4 +21,5 @@ export {
     Chart,
     Search,
     BarChartProduct,
+    ModalPickImage,
 };

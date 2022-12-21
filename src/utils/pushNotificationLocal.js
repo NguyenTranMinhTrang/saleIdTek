@@ -4,6 +4,7 @@ import { navigate } from '../RootNavigation';
 
 PushNotification.configure({
     onNotification: function (notification) {
+        console.log('Press on a new notification', notification);
         if (notification.userInteraction) {
             if (notification.data && notification.data.type === 'Detail') {
                 navigate('Home', { id: Number(notification.data.id), screen: 'Detail' });

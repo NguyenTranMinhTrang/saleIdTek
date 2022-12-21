@@ -5,6 +5,7 @@ import Input from './Input';
 import Store from './Store';
 import AddProduct from './AddProduct';
 import ChartDay from './ChartDay';
+import PickFile from './PickFile';
 
 export {
     Home,
@@ -14,4 +15,5 @@ export {
     Store,
     AddProduct,
     ChartDay,
+    PickFile,
 };

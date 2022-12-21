@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Tabs from './Tabs';
-import { Detail, AddProduct, ChartDay } from '../screens';
+import { Detail, AddProduct, ChartDay, PickFile } from '../screens';
 import { navigationRef } from '../RootNavigation';
 
 const Stack = createNativeStackNavigator();
@@ -36,6 +36,10 @@ const Route = () => {
                     component={ChartDay}
                 />
 
+                <Stack.Screen
+                    name="PickFile"
+                    component={PickFile}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );

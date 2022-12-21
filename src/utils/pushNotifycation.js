@@ -1,7 +1,6 @@
 import messaging from '@react-native-firebase/messaging';
 import { addNotification, updateNotification, getNotificationById } from '../firebase/crud';
 import { getItem, setItem } from '../localStorage';
-import { sendNotificationLocal } from './pushNotificationLocal';
 import { intervalToDuration } from 'date-fns';
 import { Timestamp } from 'firebase/firestore';
 
@@ -31,8 +30,11 @@ export const getToken = async () => {
         try {
             let fcmtoken = await messaging().getToken();
             if (fcmtoken) {
-                token = fcmtoken;
                 let id = (Date.now()).toString();
+                token = {
+                    id: id,
+                    token: fcmtoken,
+                };
                 const result = await addNotification(fcmtoken, id);
                 if (result.code === 1) {
                     await setItem('fcmtoken', {
@@ -46,13 +48,9 @@ export const getToken = async () => {
         }
     }
     else {
-        console.log('Token from local: ', token);
         const tokenFromDatabase = await getNotificationById(token.id);
-        console.log('tokenFromDatabase: ', tokenFromDatabase);
         if (tokenFromDatabase.code === 1) {
-            console.log(tokenFromDatabase.data.date);
             let date = (tokenFromDatabase.data.date).toDate();
-            console.log('date: ', date);
 
             const distance = intervalToDuration({
                 start: date,
@@ -60,7 +58,6 @@ export const getToken = async () => {
             });
 
             if (distance.months >= 2) {
-                console.log('here');
                 let newToken = await messaging().getToken();
                 const result = await updateNotification(token.id, {
                     token: newToken,
@@ -95,33 +92,6 @@ export const getToken = async () => {
     }
 
     console.log('Done token: ', token);
-};
-
-export const notificationListener = () => {
-
-    messaging().onNotificationOpenedApp(remoteMessage => {
-        console.log(
-            'Notification caused app to open from background state:',
-            remoteMessage.notification,
-        );
-    });
-
-    messaging()
-        .getInitialNotification()
-        .then(remoteMessage => {
-            if (remoteMessage) {
-                console.log(
-                    'Notification caused app to open from quit state:',
-                    remoteMessage.notification,
-                );
-            }
-        });
-
-    messaging().onMessage(async (remoteMessage) => {
-        sendNotificationLocal(remoteMessage);
-    });
-
-
 };
 
 export const sendNotification = async (title, body, data) => {

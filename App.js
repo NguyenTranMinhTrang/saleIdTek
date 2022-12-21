@@ -5,7 +5,9 @@ import store from './src/redux/stores';
 import { LogBox, AppState } from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
 import RNRestart from 'react-native-restart';
-import { requestUserPermission, getToken, notificationListener } from './src/utils/pushNotifycation';
+import { requestUserPermission, getToken } from './src/utils/pushNotifycation';
+import messaging from '@react-native-firebase/messaging';
+import { sendNotificationLocal } from './src/utils/pushNotificationLocal';
 
 LogBox.ignoreLogs(['Non-serializable']);
 const TIME = 60;
@@ -17,10 +19,28 @@ const App = () => {
 
   React.useEffect(() => {
 
-    requestUserPermission();
-    getToken();
-    notificationListener();
+    const checkPermission = async () => {
+      requestUserPermission();
+      await getToken();
+    };
 
+    checkPermission();
+
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
+    });
+
+    const foreground = messaging().onMessage(async (remoteMessage) => {
+      sendNotificationLocal(remoteMessage);
+    });
+
+    return () => {
+      foreground();
+    };
+  }, []);
+
+
+  React.useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (
         appState.current.match(/active/) &&
