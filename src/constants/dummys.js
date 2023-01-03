@@ -1,4 +1,3 @@
-import images from './images';
 import _ from 'lodash';
 
 const genarateData = () => {
@@ -24,7 +23,7 @@ const genarateData = () => {
             id: i,
             name: `Product ${i}`,
             profit: (Math.random() + 0.1).toFixed(1),
-            image: images.productImage,
+            image: '',
             description: 'bla bla bla',
             rate: Math.floor(Math.random() * 5 + 1),
         };

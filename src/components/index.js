@@ -9,6 +9,7 @@ import Chart from './Chart';
 import Search from './Search';
 import BarChartProduct from './BarChartProduct';
 import ModalPickImage from './ModalPickImage';
+import ModalFile from './ModalFile';
 
 export {
     Item,
@@ -22,4 +23,5 @@ export {
     Search,
     BarChartProduct,
     ModalPickImage,
+    ModalFile,
 };

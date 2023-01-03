@@ -4,10 +4,9 @@ import { FONTS, SIZES, COLORS } from '../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import images from '../constants/images';
 
-
 const Item = ({ item, onPress, onLongPress }) => {
 
-    const { name, price, rate, amount } = item;
+    const { name, price, rate, amount, image } = item;
 
     return (
         <TouchableOpacity
@@ -17,7 +16,7 @@ const Item = ({ item, onPress, onLongPress }) => {
         >
             <View style={styles.containerImage}>
                 <Image
-                    source={images.productImage}
+                    source={image ? { uri: image } : images.productImage}
                     style={styles.image}
                 />
             </View>

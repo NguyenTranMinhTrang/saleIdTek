@@ -94,7 +94,7 @@ export const getToken = async () => {
     console.log('Done token: ', token);
 };
 
-export const sendNotification = async (title, body, data) => {
+export const sendNotification = async (title, body, data = null) => {
     const message = {
         registration_ids: [
             token.token,

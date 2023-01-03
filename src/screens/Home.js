@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator, FlatList, StyleSheet, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, FlatList, StyleSheet, Alert, Linking } from 'react-native';
 import { COLORS, FONTS, SIZES } from '../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
 import { Item, Search } from '../components';
 import actions from '../redux/actions';
 import { useSelector } from 'react-redux';
@@ -18,6 +19,16 @@ const Home = ({ navigation, route }) => {
             const { id, screen } = route.params;
             navigation.navigate(screen, { id, reFresh });
         }
+        else if (route.params && route.params.receive) {
+            console.log('Receive data: ', route.params.receive);
+            const { name, profit, description, rate } = route.params.receive;
+            Alert.alert('Receive from another app',
+                `Name: ${name} - Profit: ${profit} - Description: ${description} - Rate: ${rate}`
+            );
+        }
+        else {
+            console.log('No object: ', route);
+        }
     }, [route.params]);
 
     React.useEffect(() => {
@@ -27,6 +38,18 @@ const Home = ({ navigation, route }) => {
         };
         getListData();
     }, []);
+
+    const onShare = () => {
+        const url = 'app://home/6';
+        Linking.canOpenURL(url)
+            .then(supported => {
+                if (!supported) {
+                    console.log('Can\'t handle url: ' + url);
+                } else {
+                    return Linking.openURL(url);
+                }
+            }).catch(err => console.error('An error occurred', err));
+    };
 
     const reFresh = async () => {
         setLoading(true);
@@ -47,6 +70,7 @@ const Home = ({ navigation, route }) => {
     };
 
     const onPress = (item) => {
+        console.log('item: ', item);
         navigation.navigate('Detail', { id: item.id, reFresh: reFresh });
     };
 
@@ -81,6 +105,13 @@ const Home = ({ navigation, route }) => {
                     onPress={() => navigation.navigate('PickFile')}
                 >
                     <AntDesign name="addfile" color={COLORS.white} size={35} />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.buttonRefresh}
+                    onPress={onShare}
+                >
+                    <Entypo name="share" color={COLORS.white} size={35} />
                 </TouchableOpacity>
 
                 <Text style={{ ...FONTS.h2, color: COLORS.white }}>List Product</Text>

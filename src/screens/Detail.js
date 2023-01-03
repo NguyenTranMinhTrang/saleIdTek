@@ -14,6 +14,8 @@ import { useSelector } from 'react-redux';
 import _ from 'lodash';
 
 const Detail = ({ navigation, route }) => {
+
+
     const products = useSelector((state) => state.product.products);
     const [product, setProduct] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
@@ -22,6 +24,7 @@ const Detail = ({ navigation, route }) => {
     React.useEffect(() => {
         const id = route.params.id;
         const data = _.find(products, { id: id });
+
         if (data) {
             setProduct(data);
         }
@@ -53,7 +56,7 @@ const Detail = ({ navigation, route }) => {
                 style={styles.containerHeader}
             >
                 <Image
-                    source={images.productImage}
+                    source={(product && product.image) ? { uri: product.image } : images.productImage}
                     resizeMode="cover"
                     style={styles.image}
                 />
